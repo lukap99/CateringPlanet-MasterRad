@@ -1,0 +1,25 @@
+﻿@model UserDto
+@{
+    ViewData["Title"] = "Delete manager";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container col-xxl-4 px-4 py-3">
+    <div class="card mb-2 px-0 py-0">
+        <div class="card-body py-4 px-md-5">
+            <h4>Are you sure you want to delete manager?</h4>
+            <hr />
+            <h5>Name: <span class="text-muted">@Model.FullName</span></h5>
+            <h5>E-mail: <span class="text-muted">@Model.Email</span></h5>
+            <hr />
+
+            <div class="text-center">
+                <form asp-controller="AdminUser" asp-action="DeleteManager" method="post" class="d-inline">
+                    <input type="hidden" name="id" value="@Model.Id" />
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
+                <a asp-controller="AdminUser" asp-action="Managers" class="btn btn-primary">Back</a>
+            </div>
+        </div>
+    </div>
+</div>

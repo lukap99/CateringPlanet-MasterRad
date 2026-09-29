@@ -1,0 +1,63 @@
+﻿@model FoodDto
+
+@{
+    var selectedCategoryId = ViewData["SelectedCategoryId"] is int sid ? sid : 0;
+    var isComboMenuView = ViewData["IsComboMenuView"] is bool cv && cv;
+}
+
+<div class="card mb-2">
+    <form asp-controller="Menu" asp-action="AddToCart" method="post">
+        <input type="hidden" name="FoodId" value="@Model.Id" />
+        <input type="hidden" name="selectedCategoryId" value="@selectedCategoryId" />
+        <input type="hidden" name="isComboMenuView" value="@isComboMenuView" />
+
+        <div class="row align-items-center">
+            <div class="col-2">
+                <img src="@Model.ImageUrl" alt="@Model.Name" class="img-fluid zoom" style="max-width: 100%; height: auto; margin: 10px" />
+            </div>
+
+            <div class="col-2">
+                <div class="card-body" style="word-wrap: break-word;">
+                    <h5 class="card-title">
+                        @if (Model.DiscountPercent > 0)
+                        {
+                            <span class="text-warning">(@Model.DiscountPercent.ToString()% OFF!)</span>
+                        }
+                        @Model.Name
+                    </h5>
+                    @if (Model.Ingredients != null)
+                    {
+                        <p class="text-muted">@Model.Ingredients</p>
+                    }
+                </div>
+            </div>
+
+            <div class="col text-center">
+                <h6>
+                    Category
+                    @if (Model.CategoryDiscountPercent > 0)
+                    {
+                        <br />
+                        <span class="text-warning">(@Model.CategoryDiscountPercent.ToString()% OFF!)</span>
+                    }
+                </h6>
+                <p class="text-muted">@Model.FoodCategoryName</p>
+            </div>
+
+            <div class="col text-center">
+                <h6>Quantity</h6>
+                <p>@Model.UnitOfMeasurement</p>
+                <input type="number" name="Amount" value="@Model.Amount" min="1" class="form-control mx-auto w-50" />
+            </div>
+
+            <div class="col text-center">
+                @if (Model.DiscountPercent > 0 || Model.CategoryDiscountPercent > 0)
+                {
+                    <h6 class="text-muted text-decoration-line-through">@Model.PriceString RSD</h6>
+                }
+                <h5 class="text-success"><b>@Model.SellingPriceString RSD</b></h5>
+                <button type="submit" class="btn btn-outline-success"><i class="bi bi-cart-plus"> Add to cart</i></button>
+            </div>
+        </div>
+    </form>
+</div>

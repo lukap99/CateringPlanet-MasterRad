@@ -1,0 +1,79 @@
+﻿@model IEnumerable<FoodDto>
+
+@{
+    Layout = "~/Views/Shared/_MenuLayout.cshtml";
+    ViewData["Title"] = "Menu";
+
+    // selectedCategoryId values:
+    //   0  = Show all food items + combo menus
+    //  >0  = Filter by a specific food category ID
+    //  -1  = Combo-menu-only view
+    var selectedCategoryId = ViewData["SelectedCategoryId"] is int sid ? sid : 0;
+    var isComboMenuView = ViewData["IsComboMenuView"] is bool cv && cv;
+    var comboItems = ViewData["ComboItems"] as IEnumerable<ComboMenuDto> ?? Enumerable.Empty<ComboMenuDto>();
+
+    var groupedFoodItems = Model
+        .GroupBy(f => f.FoodCategoryId)
+        .Select(g => g.ToList())
+        .ToList();
+}
+
+<div class="container bg-light px-5">
+    <div class="row">
+
+        <!-- Sidebar -->
+        @await Component.InvokeAsync("CategorySidebar", new { selectedCategoryId = selectedCategoryId, isComboMenuView = isComboMenuView })
+
+        <!-- Main items column -->
+        <div class="col py-3">
+
+            <!-- Search form (informational; search filtering is wired in a later phase) -->
+            <form method="get" asp-controller="Menu" asp-action="Index" class="form-inline mb-3">
+                <div class="input-group">
+                    <input type="text" name="searchString" class="form-control" placeholder="Search food by name..." />
+                    <button type="submit" class="btn btn-primary">Search</button>
+                </div>
+            </form>
+
+            @if (ViewData["AddMessage"] != null)
+            {
+                <div class="alert alert-success alert-dismissible show fade" role="alert">
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    <strong>Info:</strong> @ViewData["AddMessage"]
+                </div>
+            }
+            @if (ViewData["ErrorMessage"] != null)
+            {
+                <div class="alert alert-warning alert-dismissible show fade" role="alert">
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    <strong>Info:</strong> @ViewData["ErrorMessage"]
+                </div>
+            }
+
+            @if (comboItems.Any())
+            {
+                <div class="card mb-2 p-3 bg-primary text-white" style="font-family:'Segoe UI Black';">
+                    <h3 class="my-0">Combo items</h3>
+                </div>
+
+                @foreach (var comboItem in comboItems)
+                {
+                    @await Html.PartialAsync("_ComboItem", comboItem)
+                }
+            }
+
+            @foreach (var foodItems in groupedFoodItems)
+            {
+                <div class="card mb-2 p-3 bg-primary text-white" style="font-family:'Segoe UI Black';">
+                    <h3 class="my-0">@foodItems.First().FoodCategoryName</h3>
+                </div>
+                @foreach (var foodItem in foodItems)
+                {
+                    @await Html.PartialAsync("_FoodItem", foodItem)
+                }
+            }
+
+        </div>
+
+    </div>
+</div>

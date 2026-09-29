@@ -1,0 +1,64 @@
+﻿@model EditAccountViewModel
+
+@{
+    ViewData["Title"] = "Edit account";
+}
+
+<!-- Edit user details -->
+<div class="container col-5 py-5">
+
+    <div class="card">
+        <div class="card-body py-4 px-4">
+
+            <form asp-controller="Account" asp-action="EditAccount" method="post">
+                <input type="hidden" asp-for="Id" />
+                <input type="hidden" asp-for="Email" />
+
+                <h4>Edit profile</h4>
+
+                <hr class="bg-dark" />
+
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                <div class="row">
+                    <!-- Ime -->
+                    <div class="col">
+                        <label asp-for="FirstName" class="form-label"></label>
+                        <input asp-for="FirstName" class="form-control" />
+                        <span asp-validation-for="FirstName" class="text-danger"></span>
+                    </div>
+
+                    <!-- Prezime -->
+                    <div class="col mb-3">
+                        <label asp-for="LastName" class="form-label"></label>
+                        <input asp-for="LastName" class="form-control" />
+                        <span asp-validation-for="LastName" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <!-- Phone -->
+                <div class="mb-3">
+                    <label asp-for="PhoneNumber" class="form-label"></label>
+                    <input asp-for="PhoneNumber" class="form-control" placeholder="xxx-yyy-zzz" />
+                    <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                </div>
+
+                <!-- Address -->
+                <div class="mb-3">
+                    <label asp-for="Address" class="form-label"></label>
+                    <input asp-for="Address" class="form-control" />
+                    <span asp-validation-for="Address" class="text-danger"></span>
+                </div>
+
+                <!-- submit -->
+                <button type="submit" class="btn btn-success">Save changes</button>
+                <a asp-controller="Account" asp-action="AccountDetails" class="btn btn-primary">Back</a>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

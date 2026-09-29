@@ -1,0 +1,193 @@
+@model ComboMenuDto
+@{
+    ViewData["Title"] = "Edit combo menu";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var foods = ViewData["Foods"] as IEnumerable<FoodDto> ?? Enumerable.Empty<FoodDto>();
+    var categories = ViewData["Categories"] as IEnumerable<FoodCategoryDto> ?? Enumerable.Empty<FoodCategoryDto>();
+    var currentFilter = ViewData["CurrentFilter"] as string;
+    var currentCategory = ViewData["CurrentCategory"] as int? ?? 0;
+}
+
+<div class="container px-5 py-4">
+    <h3>Edit Combo: <span class="text-primary">@Model.Name</span></h3>
+    <hr />
+
+    <div class="row">
+
+        <!-- Left column: details + current items -->
+        <div class="col-4">
+            <div class="card mb-3 px-0">
+                <div class="card-header"><h5 class="mb-0">Combo Details</h5></div>
+                <div class="card-body">
+                    <form asp-controller="AdminMenu" asp-action="EditComboMenu" method="post" enctype="multipart/form-data">
+                        <input type="hidden" asp-for="Id" />
+                        <input type="hidden" asp-for="ImageFileName" />
+
+                        <div class="mb-3">
+                            <label asp-for="Name" class="form-label">Name</label>
+                            <input asp-for="Name" class="form-control" />
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Price" class="form-label">Base price</label>
+                            <div class="input-group">
+                                <input asp-for="Price" type="number" min="1" step="0.01" class="form-control" />
+                                <span class="input-group-text">RSD</span>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Selling price</label>
+                            <div>
+                                <span class="text-primary fw-bold">@Model.SellingPriceString RSD</span>
+                                @if (Model.DiscountPercent > 0)
+                                {
+                                    <span class="text-warning ms-2">(@Model.DiscountPercent.ToString()% Discount)</span>
+                                }
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="DiscountPercent" class="form-label">Discount</label>
+                            <div class="input-group">
+                                <input asp-for="DiscountPercent" type="number" min="0" max="100" step="0.01" class="form-control" />
+                                <span class="input-group-text">%</span>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Image</label>
+                            <input type="file" name="imageFile" id="imageFile" class="form-control" accept=".jpg,.jpeg,.png,.gif,.webp" />
+                            @if (!string.IsNullOrEmpty(Model.ImageUrl))
+                            {
+                                <img src="@Model.ImageUrl" class="img-thumbnail mt-2" style="max-height: 150px;" alt="Current image" />
+                            }
+                            <div class="form-text">JPG/PNG/GIF/WebP, max 15 MB.</div>
+                            @if (ViewData.ModelState["imageFile"]?.Errors.Any() == true)
+                            {
+                                <span class="text-danger">@ViewData.ModelState["imageFile"].Errors.First().ErrorMessage</span>
+                            }
+                            <img id="imagePreview" class="img-thumbnail mt-2" style="max-height: 150px; display: none;" alt="Image preview" />
+                        </div>
+
+                        <div class="mb-3 form-check">
+                            <input asp-for="IsVisible" type="checkbox" class="form-check-input" />
+                            <label asp-for="IsVisible" class="form-check-label"></label>
+                        </div>
+
+                        <hr />
+                        <div class="d-flex gap-2">
+                            <input type="submit" value="Save changes" class="btn btn-success" />
+                            <a asp-controller="AdminMenu" asp-action="DeleteComboMenu" asp-route-id="@Model.Id" class="btn btn-danger">Delete</a>
+                            <a asp-controller="AdminMenu" asp-action="Index" class="btn btn-outline-primary">Back</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Current items -->
+            <div class="card mb-3 px-0">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Items in Combo</h5>
+                    <span class="badge rounded-pill bg-primary">@Model.Items.Count</span>
+                </div>
+                <div class="card-body p-0">
+                    @if (Model.Items.Any())
+                    {
+                        <ul class="list-group list-group-flush">
+                            @foreach (var item in Model.Items)
+                            {
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <span class="fw-bold">@item.FoodName</span>
+                                        <span class="text-muted">× @item.Amount</span>
+                                    </div>
+                                    <div class="d-flex gap-2">
+                                        <form asp-controller="AdminMenu" asp-action="EditComboMenuItemAmount" method="post" class="d-flex">
+                                            <input type="hidden" name="comboMenuId" value="@Model.Id" />
+                                            <input type="hidden" name="comboMenuItemId" value="@item.Id" />
+                                            <input type="number" name="amount" value="@item.Amount" min="1" class="form-control form-control-sm me-1" style="width: 80px;" />
+                                            <button type="submit" class="btn btn-outline-primary btn-sm">Update</button>
+                                        </form>
+                                        <a asp-controller="AdminMenu" asp-action="DeleteComboMenuItem" asp-route-comboMenuId="@Model.Id" asp-route-comboMenuItemId="@item.Id" class="btn btn-outline-danger btn-sm"><i class="bi bi-trash-fill"></i></a>
+                                    </div>
+                                </li>
+                            }
+                        </ul>
+                    }
+                    else
+                    {
+                        <div class="p-3 text-muted">No items added yet.</div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <!-- Right column: food picker -->
+        <div class="col">
+            <h5>Add Food Items</h5>
+            <form method="get" asp-controller="AdminMenu" asp-action="EditComboMenu" class="mb-3">
+                <input type="hidden" name="id" value="@Model.Id" />
+                <div class="input-group">
+                    <input type="text" name="searchString" value="@currentFilter" class="form-control" placeholder="Search food by name..." />
+                    <select name="categoryId" class="form-select">
+                        <option value="">All categories</option>
+                        @foreach (var cat in categories)
+                        {
+                            @if (cat.Id == currentCategory)
+                            {
+                                <option value="@cat.Id" selected>@cat.Name</option>
+                            }
+                            else
+                            {
+                                <option value="@cat.Id">@cat.Name</option>
+                            }
+                        }
+                    </select>
+                    <button type="submit" class="btn btn-primary"><i class="bi bi-search"></i> Search</button>
+                    @if (!string.IsNullOrEmpty(currentFilter) || currentCategory > 0)
+                    {
+                        <a asp-controller="AdminMenu" asp-action="EditComboMenu" asp-route-id="@Model.Id" class="btn btn-secondary">Clear</a>
+                    }
+                </div>
+            </form>
+            @foreach (var food in foods)
+            {
+                <div class="card mb-2">
+                    <div class="row align-items-center p-2">
+                        <div class="col-2">
+                            <img src="@food.ImageUrl" class="img-fluid zoom" alt="@food.Name" />
+                        </div>
+                        <div class="col">
+                            <span class="fw-bold">@food.Name</span>
+                            <span class="text-muted">(@food.FoodCategoryName)</span>
+                            <div class="text-success small">@food.SellingPriceString RSD</div>
+                        </div>
+                        <div class="col-auto">
+                            <form asp-controller="AdminMenu" asp-action="AddItemToComboMenu" method="post" class="d-flex">
+                                <input type="hidden" name="comboMenuId" value="@Model.Id" />
+                                <input type="hidden" name="foodId" value="@food.Id" />
+                                <input type="number" name="amount" value="1" min="1" class="form-control form-control-sm me-1" style="width: 80px;" />
+                                <button type="submit" class="btn btn-outline-success btn-sm">Add</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.getElementById('imageFile')?.addEventListener('change', function () {
+            const preview = document.getElementById('imagePreview');
+            if (this.files && this.files[0]) {
+                const reader = new FileReader();
+                reader.onload = e => { preview.src = e.target.result; preview.style.display = 'block'; };
+                reader.readAsDataURL(this.files[0]);
+            }
+        });
+    </script>
+}

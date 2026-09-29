@@ -1,0 +1,28 @@
+﻿@{
+    var actionName = ViewBag.ActionName as string ?? "Index";
+    var sortOrder = ViewBag.CurrentSort as string;
+    var searchString = ViewBag.CurrentFilter as string;
+    var id = Context.Request.Query["id"].ToString();
+}
+
+@if (ViewBag.TotalPages > 1)
+{
+    <nav aria-label="Pagination">
+        <ul class="pagination justify-content-center">
+            <li class="page-item @(ViewBag.CurrentPage == 1 ? "disabled" : "")">
+                <a class="page-link" href="@Url.Action(actionName, new { sortOrder, searchString, page = (int)ViewBag.CurrentPage - 1, id })">Previous</a>
+            </li>
+
+            @for (int p = 1; p <= (int)ViewBag.TotalPages; p++)
+            {
+                <li class="page-item @(p == (int)ViewBag.CurrentPage ? "active" : "")">
+                    <a class="page-link" href="@Url.Action(actionName, new { sortOrder, searchString, page = p, id })">@p</a>
+                </li>
+            }
+
+            <li class="page-item @(ViewBag.CurrentPage == ViewBag.TotalPages ? "disabled" : "")">
+                <a class="page-link" href="@Url.Action(actionName, new { sortOrder, searchString, page = (int)ViewBag.CurrentPage + 1, id })">Next</a>
+            </li>
+        </ul>
+    </nav>
+}

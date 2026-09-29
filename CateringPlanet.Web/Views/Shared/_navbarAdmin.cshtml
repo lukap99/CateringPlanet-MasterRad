@@ -1,0 +1,83 @@
+﻿@inject UserManager<ApplicationUser> UserManager
+@inject Microsoft.Extensions.Configuration.IConfiguration Configuration
+@{
+    var currentUser = await UserManager.GetUserAsync(User);
+    var userName = currentUser is null ? "Account" : $"{currentUser.FirstName} {currentUser.LastName}";
+}
+
+<!-- Admin -->
+<nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom py-4">
+    <div class="container px-5">
+
+        <a class="navbar-brand" asp-controller="Home" asp-action="Index" style="font-family:'Segoe UI Black'; font-size:2em;">
+            <img src="~/images/ketering-logo-bw.png" style="height:50px;" alt="Logo" />
+            Ketering Planet
+        </a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+            <ul class="navbar-nav ms-auto fs-6 text-primary">
+                <li class="nav-item">
+                    <a class="nav-link" asp-controller="Home" asp-action="Index">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" asp-controller="AdminMenu" asp-action="Index">
+                        <i class="bi bi-card-list"></i>
+                        Edit menu
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" asp-controller="AdminOrder" asp-action="Index">
+                        <i class="bi bi-cash-stack"></i>
+                        Orders
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" asp-controller="AdminUser" asp-action="Users">
+                        <i class="bi bi-file-person-fill"></i>
+                        Manage customers
+                    </a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="bi bi-person-workspace"></i>
+                        Manage managers
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        <li>
+                            <a class="dropdown-item" asp-controller="AdminUser" asp-action="Managers">
+                                <i class="bi bi-person-lines-fill"></i>
+                                View managers
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" asp-controller="AdminUser" asp-action="CreateManager">
+                                <i class="bi bi-person-plus-fill"></i>
+                                Add new manager
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="@($"{Configuration["Api:BaseUrl"]}/swagger")" target="_blank" rel="noopener">
+                        <i class="bi bi-braces"></i>
+                        API (Swagger)
+                    </a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarUserDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="bi bi-person-fill"></i>
+                        @userName
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarUserDropdown">
+                        <li><a class="dropdown-item" asp-controller="Account" asp-action="AccountDetails">Account details</a></li>
+                        <li><a class="dropdown-item" asp-controller="Account" asp-action="Logout">Log out</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>

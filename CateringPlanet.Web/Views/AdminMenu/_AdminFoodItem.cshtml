@@ -1,0 +1,52 @@
+﻿@model FoodDto
+
+<div class="card mb-2">
+    <div class="row align-items-center">
+
+        <div class="col-2">
+            <img src="@Model.ImageUrl" class="img-fluid zoom" alt="@Model.Name" style="max-width: 100%; height: auto; margin: 10px" />
+        </div>
+
+        <div class="col-3">
+            <div class="card-body" style="word-wrap: break-word;">
+                <h5 class="card-title">
+                    @if (Model.DiscountPercent > 0)
+                    {
+                        <br><span class="text-warning">(@Model.DiscountPercent.ToString()% OFF!)</span>
+                    }
+                    @Model.Name
+                </h5>
+                @if (Model.Ingredients != null)
+                {
+                    <p class="text-muted">@Model.Ingredients</p>
+                }
+            </div>
+        </div>
+
+        <div class="col text-center">
+            <h6>
+                Category
+                @if (Model.CategoryDiscountPercent > 0)
+                {
+                    <br>
+                    <span class="text-warning">(@Model.CategoryDiscountPercent.ToString()% OFF!)</span>
+                }
+            </h6>
+            <p class="text-muted">@Model.FoodCategoryName</p>
+            <p><b>Quantity: </b>@Model.UnitOfMeasurement</p>
+        </div>
+
+        <div class="col text-center">
+            <h5>Base price</h5>
+            <h5 class="text-success">@Model.PriceString RSD</h5>
+            <h5>Selling price</h5>
+            <h4 class="text-success"><b>@Model.SellingPriceString RSD</b></h4>
+        </div>
+
+        <div class="col d-grid gap-2 p-5">
+            <a class="btn btn-success" asp-controller="AdminMenu" asp-action="EditFood" asp-route-id="@Model.Id"><i class="bi bi-pencil-square"> Edit item</i></a>
+            <a class="btn btn-danger" asp-controller="AdminMenu" asp-action="DeleteFood" asp-route-id="@Model.Id"><i class="bi bi-trash-fill"> Delete item</i></a>
+        </div>
+
+    </div>
+</div>

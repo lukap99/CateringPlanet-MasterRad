@@ -1,0 +1,37 @@
+﻿@model CartItemDto
+
+<div class="card mb-2">
+    <form asp-controller="Checkout" asp-action="UpdateCartItem" method="post">
+        <input type="hidden" name="itemId" value="@Model.ItemId" />
+        <input type="hidden" name="isCombo" value="@Model.IsCombo.ToString().ToLowerInvariant()" />
+
+        <div class="row d-flex align-items-center align-middle no-gutters">
+            <div class="col-2">
+                <img src="@Model.ImageUrl" class="img-fluid zoom" alt="@Model.Name" />
+            </div>
+
+            <div class="col-3 align-middle">
+                <h5>@Model.Name</h5>
+                <span class="text-muted pb-0">
+                    @Model.UnitPrice.ToString("N2") RSD<br />
+                    @(Model.IsCombo ? "Combo paket" : "Food")
+                </span>
+            </div>
+
+            <div class="col text-center">
+                <h6>Quantity: @Model.Amount</h6>
+                <input type="number" name="amount" value="@Model.Amount" min="1" class="form-control w-50 mx-auto" />
+            </div>
+
+            <div class="col-auto text-center">
+                <h6>Price</h6>
+                <h5 class="text-secondary">@Model.LineTotalString RSD</h5>
+            </div>
+
+            <div class="col text-center">
+                <button type="submit" class="btn btn-success"><i class="bi bi-pencil-square"> Edit</i></button>
+                <a asp-controller="Checkout" asp-action="RemoveCartItem" asp-route-itemId="@Model.ItemId" asp-route-isCombo="@Model.IsCombo" class="btn btn-danger" role="button"><i class="bi bi-trash-fill"></i></a>
+            </div>
+        </div>
+    </form>
+</div>

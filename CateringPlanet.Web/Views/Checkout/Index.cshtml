@@ -1,0 +1,45 @@
+﻿@model CartDto
+@{
+    ViewData["Title"] = "Cart";
+    Layout = "~/Views/Shared/_MenuLayout.cshtml";
+}
+
+<div class="container bg-light px-5 mb-3">
+    <div class="row">
+
+        <!-- Cart items column -->
+        <div class="col py-3">
+
+            @if (ViewData["ChangeAmountMessage"] != null)
+            {
+                <div class="alert alert-success alert-dismissible show fade" role="alert">
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    <strong>Info: </strong>@ViewData["ChangeAmountMessage"]
+                </div>
+            }
+            @if (ViewData["ErrorMessage"] != null)
+            {
+                <div class="alert alert-warning alert-dismissible show fade" role="alert">
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    <strong>Error: </strong>@ViewData["ErrorMessage"]
+                </div>
+            }
+
+            @if (Model.Items.Any())
+            {
+                @foreach (var item in Model.Items)
+                {
+                    @await Html.PartialAsync("_CartItem", item)
+                }
+            }
+            else
+            {
+                @await Html.PartialAsync("_CartEmpty")
+            }
+        </div>
+
+        <!-- Sidebar -->
+        @await Html.PartialAsync("_CartSidebar", Model)
+
+    </div>
+</div>

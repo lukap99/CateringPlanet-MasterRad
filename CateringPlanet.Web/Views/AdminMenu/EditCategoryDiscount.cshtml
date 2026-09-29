@@ -1,0 +1,37 @@
+﻿@{
+    ViewData["Title"] = "Edit category discount";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var categories = ViewData["Categories"] as IEnumerable<FoodCategoryDto> ?? Enumerable.Empty<FoodCategoryDto>();
+}
+
+<div class="container col-xxl-4 px-4 py-3">
+    <div class="card mb-2 px-0">
+        <div class="card-body py-4 px-md-5">
+            <form asp-controller="AdminMenu" asp-action="EditCategoryDiscount" method="post">
+                <h4>Edit food category discount</h4>
+                <hr />
+
+                <div class="mb-3">
+                    <label class="form-label">Food category</label>
+                    <select name="foodCategoryId" class="form-select">
+                        @foreach (var cat in categories)
+                        {
+                            <option value="@cat.Id">@cat.Name</option>
+                        }
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Discount percentage</label>
+                    <div class="input-group" style="max-width: 40%;">
+                        <input name="discountPercent" type="number" min="0" max="100" step="0.01" value="0" class="form-control" />
+                        <span class="input-group-text">%</span>
+                    </div>
+                </div>
+
+                <input type="submit" value="Save changes" class="btn btn-success" />
+                <a asp-controller="AdminMenu" asp-action="Index" class="btn btn-primary">Back</a>
+            </form>
+        </div>
+    </div>
+</div>

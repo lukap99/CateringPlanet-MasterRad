@@ -1,0 +1,50 @@
+﻿@model EditAccountViewModel
+
+@{
+    ViewData["Title"] = "Account details";
+}
+
+<!-- Read-only account details -->
+<div class="container col-5 py-5">
+
+    <div class="card">
+        <div class="card-body py-4 px-4">
+
+            <h3>Account details</h3>
+
+            <div class="mb-3">
+                <div class="text-muted" style="font-size: 0.8em;">First name</div>
+                <div style="font-size: 1.1em">@Model.FirstName</div>
+            </div>
+
+            <div class="mb-3">
+                <div class="text-muted" style="font-size: 0.8em;">Last name</div>
+                <div style="font-size: 1.1em">@Model.LastName</div>
+            </div>
+
+            <div class="mb-3">
+                <div class="text-muted" style="font-size: 0.8em;">E-mail</div>
+                <div style="font-size: 1.1em">@Model.Email</div>
+            </div>
+
+            <div class="mb-3">
+                <div class="text-muted" style="font-size: 0.8em;">Points</div>
+                <div style="font-size: 1.1em">@Model.Points</div>
+            </div>
+
+            <div class="mb-3">
+                <div class="text-muted" style="font-size: 0.8em;">Phone</div>
+                <div style="font-size: 1.1em">@(string.IsNullOrEmpty(Model.PhoneNumber) ? "-" : Model.PhoneNumber)</div>
+            </div>
+
+            <div class="mb-3">
+                <div class="text-muted" style="font-size: 0.8em;">Address</div>
+                <div style="font-size: 1.1em">@(string.IsNullOrEmpty(Model.Address) ? "-" : Model.Address)</div>
+            </div>
+
+            <a asp-controller="Account" asp-action="EditAccount" class="btn btn-primary">Edit profile</a>
+            <a asp-controller="Home" asp-action="Index" class="btn btn-outline-primary">Back</a>
+
+        </div>
+    </div>
+</div>

@@ -1,0 +1,61 @@
+﻿@model IEnumerable<FoodDto>
+@{
+    ViewData["Title"] = "Admin menu";
+    Layout = "~/Views/Shared/_MenuLayout.cshtml";
+
+    var selectedCategoryId = ViewData["SelectedCategoryId"] is int sid ? sid : 0;
+    var comboItems = ViewData["ComboItems"] as IEnumerable<ComboMenuDto> ?? Enumerable.Empty<ComboMenuDto>();
+
+    var groupedFoodItems = Model
+        .GroupBy(f => f.FoodCategoryId)
+        .Select(g => g.ToList())
+        .ToList();
+}
+
+<div class="container bg-light px-5">
+    <div class="row">
+
+        <!-- Sidebar -->
+        @await Html.PartialAsync("_AdminCategorySidebar", (IEnumerable<FoodCategoryDto>)(ViewData["Categories"] ?? Enumerable.Empty<FoodCategoryDto>()))
+
+        <div class="col py-3">
+
+            <!-- Search form -->
+            <form method="get" asp-controller="AdminMenu" asp-action="Index" class="form-inline mb-3">
+                <div class="input-group">
+                    <input type="text" name="searchString" value="@ViewData["CurrentFilter"]" class="form-control" placeholder="Search food by name..." />
+                    <button type="submit" class="btn btn-primary">Search</button>
+                    @if (!string.IsNullOrEmpty((string?)ViewData["CurrentFilter"]))
+                    {
+                        <a asp-controller="AdminMenu" asp-action="Index" class="btn btn-secondary">Clear</a>
+                    }
+                </div>
+            </form>
+
+            @if (comboItems.Any())
+            {
+                <div class="card mb-2 p-3 bg-primary text-white" style="font-family:'Segoe UI Black';">
+                    <h3 class="my-0">Combo items</h3>
+                </div>
+
+                @foreach (var comboItem in comboItems)
+                {
+                    @await Html.PartialAsync("_AdminComboItem", comboItem)
+                }
+            }
+
+            @foreach (var foodItems in groupedFoodItems)
+            {
+                <div class="card mb-2 p-3 bg-primary text-white" style="font-family:'Segoe UI Black';">
+                    <h3 class="my-0">@foodItems.First().FoodCategoryName</h3>
+                </div>
+                @foreach (var foodItem in foodItems)
+                {
+                    @await Html.PartialAsync("_AdminFoodItem", foodItem)
+                }
+            }
+
+        </div>
+
+    </div>
+</div>

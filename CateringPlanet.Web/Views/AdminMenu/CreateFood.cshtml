@@ -1,0 +1,91 @@
+@model FoodDto
+@{
+    ViewData["Title"] = "Create food";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var categories = ViewData["Categories"] as IEnumerable<FoodCategoryDto> ?? Enumerable.Empty<FoodCategoryDto>();
+}
+
+<div class="container col-xxl-4 px-4 py-3">
+    <div class="card mb-2 px-0">
+        <div class="card-body py-4 px-md-5">
+            <form asp-controller="AdminMenu" asp-action="CreateFood" method="post" enctype="multipart/form-data">
+                <h4>Create food</h4>
+                <hr />
+
+                <div class="mb-3">
+                    <label asp-for="Name" class="form-label"></label>
+                    <input asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="FoodCategoryId" class="form-label">Food category</label>
+                    <select asp-for="FoodCategoryId" class="form-select">
+                        @foreach (var cat in categories)
+                        {
+                            <option value="@cat.Id">@cat.Name</option>
+                        }
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="UnitOfMeasurement" class="form-label"></label>
+                    <input asp-for="UnitOfMeasurement" class="form-control w-50" />
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Ingredients" class="form-label"></label>
+                    <input asp-for="Ingredients" class="form-control" />
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Price" class="form-label">Base price</label>
+                    <div class="input-group" style="max-width: 40%;">
+                        <input asp-for="Price" type="number" min="1" step="0.01" class="form-control" />
+                        <span class="input-group-text">RSD</span>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="DiscountPercent" class="form-label">Discount</label>
+                    <div class="input-group" style="max-width: 40%;">
+                        <input asp-for="DiscountPercent" type="number" min="0" max="100" step="0.01" class="form-control" />
+                        <span class="input-group-text">%</span>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Image</label>
+                    <input type="file" name="imageFile" id="imageFile" class="form-control" accept=".jpg,.jpeg,.png,.gif,.webp" />
+                    <div class="form-text">JPG/PNG/GIF/WebP, max 15 MB.</div>
+                    @if (ViewData.ModelState["imageFile"]?.Errors.Any() == true)
+                    {
+                        <span class="text-danger">@ViewData.ModelState["imageFile"].Errors.First().ErrorMessage</span>
+                    }
+                    <img id="imagePreview" class="img-thumbnail mt-2" style="max-height: 200px; display: none;" alt="Image preview" />
+                </div>
+
+                <div class="mb-3 form-check">
+                    <input asp-for="IsVisible" type="checkbox" class="form-check-input" />
+                    <label asp-for="IsVisible" class="form-check-label"></label>
+                </div>
+
+                <input type="submit" value="Create" class="btn btn-success" />
+                <a asp-controller="AdminMenu" asp-action="Index" class="btn btn-primary">Back</a>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.getElementById('imageFile')?.addEventListener('change', function () {
+            const preview = document.getElementById('imagePreview');
+            if (this.files && this.files[0]) {
+                const reader = new FileReader();
+                reader.onload = e => { preview.src = e.target.result; preview.style.display = 'block'; };
+                reader.readAsDataURL(this.files[0]);
+            }
+        });
+    </script>
+}

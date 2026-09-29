@@ -1,0 +1,62 @@
+@CateringPlanet.Api_HostAddress = https://localhost:7025
+
+### 1) Login as admin (returns a JWT — copy the token value)
+POST {{CateringPlanet.Api_HostAddress}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "luka.popovic@cateringplanet.rs",
+  "password": "Catering123!"
+}
+
+### 2) Public: get all menu categories
+GET {{CateringPlanet.Api_HostAddress}}/api/menu/categories
+Accept: application/json
+
+### 3) Public: get visible foods (optional categoryId filter)
+GET {{CateringPlanet.Api_HostAddress}}/api/menu/foods?categoryId=1
+Accept: application/json
+
+### 4) Public: get visible combos
+GET {{CateringPlanet.Api_HostAddress}}/api/menu/combos
+Accept: application/json
+
+### 5) Authenticated: current user profile (replace TOKEN with the JWT from step 1)
+GET {{CateringPlanet.Api_HostAddress}}/api/account
+Authorization: Bearer TOKEN
+
+### 6) Authenticated: place an order
+POST {{CateringPlanet.Api_HostAddress}}/api/orders
+Content-Type: application/json
+Authorization: Bearer TOKEN
+
+{
+  "lines": [
+    { "itemId": 21, "isCombo": false, "amount": 2 },
+    { "itemId": 1, "isCombo": true, "amount": 1 }
+  ],
+  "deliveryMethodId": 1,
+  "paymentMethodId": 1,
+  "discountId": null,
+  "contactName": "Luka Popovic",
+  "contactPhone": "0601234567",
+  "deliveryLocation": "Bulevar kralja Aleksandra 10, Beograd"
+}
+
+### 7) Authenticated: my orders
+GET {{CateringPlanet.Api_HostAddress}}/api/orders
+Authorization: Bearer TOKEN
+
+### 8) Admin: all orders (optionally filtered by statusId)
+GET {{CateringPlanet.Api_HostAddress}}/api/admin/orders?statusId=1
+Authorization: Bearer TOKEN
+
+### 9) Admin: update order status (any transition allowed)
+PATCH {{CateringPlanet.Api_HostAddress}}/api/admin/orders/1/status
+Content-Type: application/json
+Authorization: Bearer TOKEN
+
+{
+  "statusId": 3,
+  "cancellationReason": null
+}

@@ -1,0 +1,100 @@
+@model CartDto
+@{
+    var deliveryMethods = ViewData["DeliveryMethods"] as IEnumerable<DeliveryMethodDto> ?? Enumerable.Empty<DeliveryMethodDto>();
+    var paymentMethods = ViewData["PaymentMethods"] as IEnumerable<PaymentMethodDto> ?? Enumerable.Empty<PaymentMethodDto>();
+    var discounts = ViewData["Discounts"] as IEnumerable<OrderDiscountDto> ?? Enumerable.Empty<OrderDiscountDto>();
+    var userPoints = ViewData["UserPoints"] as int? ?? 0;
+}
+
+<div class="col-md-12 col-12 pt-3" style="width: 280px;">
+    <div class="card">
+        <div class="card-header py-3">
+            <h5 class="mb-0">Stanje Narudžbine</h5>
+        </div>
+
+        <div class="card-body">
+            <form asp-controller="Checkout" asp-action="CheckoutReview" method="post">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item d-flex flex-column align-items-left border-0 px-0 pb-0">
+                        <p>Nacin placanja</p>
+                        <select name="paymentMethodId" class="form-select">
+                            @foreach (var pm in paymentMethods)
+                            {
+                                <option value="@pm.Id">@pm.Type</option>
+                            }
+                        </select>
+                    </li>
+
+                    <li class="list-group-item d-flex flex-column align-items-left border-0 px-0 pb-0">
+                        <p>Delivery address</p>
+                        <input type="text" name="deliveryLocation" class="form-control" value="@Model.DeliveryLocation" />
+                    </li>
+
+                    <li class="list-group-item d-flex flex-column align-items-left border-0 px-0 pb-0">
+                        <p>Shipping</p>
+                        <select name="deliveryMethodId" class="form-select">
+                            @foreach (var dm in deliveryMethods)
+                            {
+                                <option value="@dm.Id">@dm.Name (+@dm.Price.ToString("N2") RSD)</option>
+                            }
+                        </select>
+                    </li>
+
+                    <li class="list-group-item d-flex flex-column align-items-left border-0 px-0 pb-0">
+                        <p>Popust</p>
+                        <select name="orderDiscountId" class="form-select">
+                            @foreach (var d in discounts.Where(x => x.PointCost <= userPoints))
+                            {
+                                <option value="@d.Id">@d.Name</option>
+                            }
+                        </select>
+                    </li>
+
+                    @if (Model.OrderDiscount != null && Model.OrderDiscount.DiscountPercent > 0)
+                    {
+                        <li class="list-group-item d-flex justify-content-between align-items-center border-0 px-0">
+                            <span>Discount reduction</span>
+                            <span class="text-success">-@Model.DiscountReductionString RSD</span>
+                        </li>
+                    }
+
+                    <hr style="height:2px;border-width:0;color:gray;background-color:gray" />
+
+                    <li class="list-group-item d-flex justify-content-between align-items-center border-0 px-0">
+                        <div><strong>Total</strong></div>
+                        <span class="text-muted"><strong>@Model.BuyingPriceString RSD</strong></span>
+                    </li>
+
+                    <li class="list-group-item d-flex justify-content-between align-items-center border-0 px-0">
+                        <span>VAT (20%)</span>
+                        <span class="text-muted">@((Model.BuyingPrice * 20m / 100m).ToString("N2")) RSD</span>
+                    </li>
+
+                    <li class="list-group-item d-flex justify-content-between align-items-center border-0 px-0">
+                        <div><strong>Points earned</strong></div>
+                        <span class="text-muted"><strong>@Model.PointsDifference points</strong></span>
+                    </li>
+
+                    <li class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 mb-3">
+                        <div><strong>Your points</strong></div>
+                        <span class="text-muted"><strong>@userPoints points</strong></span>
+                    </li>
+                </ul>
+
+                @if (User.Identity?.IsAuthenticated != true || !Model.Items.Any())
+                {
+                    <input type="submit" value="Checkout" class="btn btn-primary btn-lg btn-block mb-3" style="width: 100%;" disabled />
+                }
+                else
+                {
+                    <input type="submit" value="Checkout" class="btn btn-primary btn-lg btn-block mb-3" style="width: 100%;" />
+                }
+            </form>
+
+            @if (Model.Items.Any())
+            {
+                <a asp-controller="Checkout" asp-action="EmptyCart" class="btn btn-outline-danger btn-lg btn-block" style="width: 100%;">Empty cart</a>
+            }
+        </div>
+    </div>
+</div>

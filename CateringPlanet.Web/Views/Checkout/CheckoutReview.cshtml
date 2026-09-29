@@ -1,0 +1,65 @@
+﻿@model CartDto
+@{
+    ViewData["Title"] = "Checkout Review";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container col-xxl-4 px-4 py-3">
+    <div class="row px-0 py-0">
+        <div class="card mb-2 px-0 py-0">
+            <div class="row g-0 d-flex align-items-center">
+                <div class="col-lg">
+                    <div class="card-body py-4 px-md-5">
+                        <form asp-controller="Checkout" asp-action="CreateOrder" method="post">
+                            <fieldset>
+                                <div>
+                                    <h4>Checkout</h4>
+                                    <hr style="height:2px;border-width:0;color:gray;background-color:gray">
+                                    <h5>Location: <span class="text-muted">@Model.DeliveryLocation</span></h5>
+                                    <h5>Discount: <span class="text-muted">@Model.OrderDiscount?.Name</span></h5>
+                                    @if (Model.PointsDifference >= 0)
+                                    {
+                                        <h5>Points earned: <span class="text-muted">@Model.PointsDifference</span></h5>
+                                    }
+                                    else
+                                    {
+                                        <h5>Points used: <span class="text-muted">@Model.PointsDifference</span></h5>
+                                    }
+
+                                    <hr style="height:2px;border-width:0;color:gray;background-color:gray">
+
+                                    <h5>Shipping: <span class="text-muted">@Model.DeliveryMethod?.Name</span></h5>
+                                    <h5>Shipping cost: <span class="text-muted">@Model.DeliveryMethod?.PriceString RSD</span></h5>
+
+                                    <hr style="height:1px;border-width:0;color:gray;background-color:gray">
+
+                                    <ul>
+                                        <li style="font-size: 0.8em; list-style-type: none;"><b><span>Item/Price/Amount</span><span class="float-end">Subtotal</span></b></li>
+                                        @foreach (var item in Model.Items)
+                                        {
+                                            <li style="font-size: 0.8em;">
+                                                @item.Name<br />
+                                                <span class="text-success">@item.UnitPrice.ToString("N2") RSD</span> × @item.Amount
+                                                <span class="text-success float-end">@item.LineTotalString RSD</span>
+                                            </li>
+                                        }
+                                    </ul>
+                                    <h5><b>Subtotal: </b><span class="text-success float-end">@Model.BasePriceString RSD</span></h5>
+
+                                    <hr style="height:2px;border-width:0;color:gray;background-color:gray">
+
+                                    <h5>Shipping: <span class="float-end text-success">+@Model.DeliveryMethod?.PriceString RSD</span></h5>
+                                    <h5>Discount: <span class="float-end text-success">-@Model.DiscountReductionString RSD</span></h5>
+                                    <h4><b>Total: </b><span class="text-success float-end">@Model.BuyingPriceString RSD</span></h4>
+                                </div>
+
+                                <input type="submit" class="btn btn-success" value="Checkout" />
+                                <a asp-controller="Checkout" asp-action="Index" class="btn btn-outline-primary">Cancel</a>
+                            </fieldset>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,55 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.37502.11
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CateringPlanet.Domain", "CateringPlanet.Domain\CateringPlanet.Domain.csproj", "{6B7ECE8B-30DC-4A4E-87B3-B15F5C1D7B50}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CateringPlanet.Application", "CateringPlanet.Application\CateringPlanet.Application.csproj", "{67FE010E-B54E-48CA-9EF0-7E3D5E811FEC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CateringPlanet.Infrastructure", "CateringPlanet.Infrastructure\CateringPlanet.Infrastructure.csproj", "{EA4456FD-7A94-4C94-9099-DDECF7FD1387}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CateringPlanet.Web", "CateringPlanet.Web\CateringPlanet.Web.csproj", "{678809CF-DFDE-4389-9121-F95A51AA9D91}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CateringPlanet.Api", "CateringPlanet.Api\CateringPlanet.Api.csproj", "{492E7221-27A4-4363-AB92-B0C18CFC269F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CateringPlanet.Tests", "CateringPlanet.Tests\CateringPlanet.Tests.csproj", "{E2D42F33-0116-4CAD-98E2-01A8DCC13015}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6B7ECE8B-30DC-4A4E-87B3-B15F5C1D7B50}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6B7ECE8B-30DC-4A4E-87B3-B15F5C1D7B50}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6B7ECE8B-30DC-4A4E-87B3-B15F5C1D7B50}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6B7ECE8B-30DC-4A4E-87B3-B15F5C1D7B50}.Release|Any CPU.Build.0 = Release|Any CPU
+		{67FE010E-B54E-48CA-9EF0-7E3D5E811FEC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{67FE010E-B54E-48CA-9EF0-7E3D5E811FEC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{67FE010E-B54E-48CA-9EF0-7E3D5E811FEC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{67FE010E-B54E-48CA-9EF0-7E3D5E811FEC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EA4456FD-7A94-4C94-9099-DDECF7FD1387}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EA4456FD-7A94-4C94-9099-DDECF7FD1387}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EA4456FD-7A94-4C94-9099-DDECF7FD1387}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EA4456FD-7A94-4C94-9099-DDECF7FD1387}.Release|Any CPU.Build.0 = Release|Any CPU
+		{678809CF-DFDE-4389-9121-F95A51AA9D91}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{678809CF-DFDE-4389-9121-F95A51AA9D91}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{678809CF-DFDE-4389-9121-F95A51AA9D91}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{678809CF-DFDE-4389-9121-F95A51AA9D91}.Release|Any CPU.Build.0 = Release|Any CPU
+		{492E7221-27A4-4363-AB92-B0C18CFC269F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{492E7221-27A4-4363-AB92-B0C18CFC269F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{492E7221-27A4-4363-AB92-B0C18CFC269F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{492E7221-27A4-4363-AB92-B0C18CFC269F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E2D42F33-0116-4CAD-98E2-01A8DCC13015}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E2D42F33-0116-4CAD-98E2-01A8DCC13015}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E2D42F33-0116-4CAD-98E2-01A8DCC13015}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E2D42F33-0116-4CAD-98E2-01A8DCC13015}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F497851A-F35D-4DC6-990E-B427D9D2B571}
+	EndGlobalSection
+EndGlobal

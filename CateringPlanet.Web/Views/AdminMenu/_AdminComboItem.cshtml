@@ -1,0 +1,44 @@
+﻿@model ComboMenuDto
+
+<div class="card mb-2">
+    <div class="row align-items-center">
+
+        <div class="col-2">
+            <img src="@Model.ImageUrl" class="img-fluid zoom" alt="@Model.Name" style="max-width: 100%; height: auto; margin: 10px" />
+        </div>
+
+        <div class="col-3">
+            <div class="card-body" style="word-wrap: break-word;">
+                <h5 class="card-title">
+                    @Model.Name
+                    @if (Model.DiscountPercent > 0)
+                    {
+                        <br><span class="text-warning">(@Model.DiscountPercent.ToString()% OFF!)</span>
+                    }
+                </h5>
+                @if (Model.Items.Any())
+                {
+                    <p class="text-muted">@Model.ListOfItems</p>
+                }
+            </div>
+        </div>
+
+        <div class="col text-center">
+            <h5>Items</h5>
+            <p class="text-muted"><b>@Model.ListOfItems</b></p>
+        </div>
+
+        <div class="col text-center">
+            <h5>Base price</h5>
+            <h5 class="text-success">@Model.PriceString RSD</h5>
+            <h5>Selling price</h5>
+            <h4 class="text-success"><b>@Model.SellingPriceString RSD</b></h4>
+        </div>
+
+        <div class="col d-grid gap-2 p-5">
+            <a class="btn btn-success" asp-controller="AdminMenu" asp-action="EditComboMenu" asp-route-id="@Model.Id"><i class="bi bi-pencil-square"> Edit item</i></a>
+            <a class="btn btn-danger" asp-controller="AdminMenu" asp-action="DeleteComboMenu" asp-route-id="@Model.Id"><i class="bi bi-trash-fill"> Delete item</i></a>
+        </div>
+
+    </div>
+</div>

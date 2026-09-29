@@ -1,0 +1,27 @@
+﻿@model IEnumerable<FoodCategoryDto>
+
+@{
+    var selectedCategoryId = (int)ViewData["SelectedCategoryId"];
+    var isComboMenuView = (bool)ViewData["IsComboMenuView"];
+    var listItemClass = "list-group-item list-group-item-action";
+    var listItemActiveClass = "list-group-item list-group-item-action active";
+}
+
+<div class="col-12 d-flex flex-column flex-shrink-0 p-3 text-dark bg-light" style="width: 280px;">
+    <span class="fs-4 px-5">Categories</span>
+    <hr />
+
+    <div class="list-group">
+        <a class="@(selectedCategoryId == 0 && !isComboMenuView ? listItemActiveClass : listItemClass)"
+           asp-controller="Menu" asp-action="Index">Sva jela</a>
+
+        <a class="@(isComboMenuView ? listItemActiveClass : listItemClass)"
+           asp-controller="Menu" asp-action="ComboMenu">Kombo meni</a>
+
+        @foreach (var category in Model)
+        {
+            <a class="@(category.Id == selectedCategoryId ? listItemActiveClass : listItemClass)"
+               asp-controller="Menu" asp-action="Index" asp-route-id="@category.Id">@category.Name</a>
+        }
+    </div>
+</div>

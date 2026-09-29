@@ -1,0 +1,41 @@
+﻿@{
+    ViewData["Title"] = "Create manager";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container col-5 py-5">
+    <div class="card">
+        <div class="card-body py-4 px-4">
+            <form asp-controller="AdminUser" asp-action="CreateManager" method="post">
+                <h4>Create manager</h4>
+                <hr />
+
+                <div asp-validation-summary="All" class="text-danger"></div>
+
+                <div class="row">
+                    <div class="col">
+                        <label class="form-label">First name</label>
+                        <input name="firstName" class="form-control" />
+                    </div>
+                    <div class="col mb-3">
+                        <label class="form-label">Last name</label>
+                        <input name="lastName" class="form-control" />
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">E-mail</label>
+                    <input name="email" type="email" class="form-control" placeholder="email@provider.com" />
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Password</label>
+                    <input name="password" type="password" class="form-control" />
+                </div>
+
+                <input type="submit" value="Create manager" class="btn btn-success" />
+                <a asp-controller="AdminUser" asp-action="Managers" class="btn btn-primary">Back</a>
+            </form>
+        </div>
+    </div>
+</div>

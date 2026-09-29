@@ -1,0 +1,124 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem rgba(200, 16, 46, 0.25);
+}
+
+.zoom {
+    transition: transform .2s;
+}
+
+.zoom:hover {
+    -ms-transform: scale(2); /* IE 9 */
+    -webkit-transform: scale(2); /* Safari 3-8 */
+    transform: scale(2);
+    position: relative;
+    z-index: 99999 !important;
+}
+
+/* Red primary theme override (#c8102e brand crimson) */
+
+:root {
+    --bs-primary: #c8102e;
+    --bs-primary-rgb: 200, 16, 46;
+}
+
+.btn-primary {
+    color: #fff;
+    background-color: #c8102e;
+    border-color: #c8102e;
+}
+
+.btn-primary:hover {
+    color: #fff;
+    background-color: #a00d25;
+    border-color: #960c23;
+}
+
+.btn-check:focus + .btn-primary,
+.btn-primary:focus {
+    color: #fff;
+    background-color: #a00d25;
+    border-color: #960c23;
+    box-shadow: 0 0 0 .25rem rgba(200, 16, 46, .25);
+}
+
+.btn-check:active + .btn-primary,
+.btn-check:checked + .btn-primary,
+.btn-primary.active,
+.btn-primary:active,
+.show > .btn-primary.dropdown-toggle {
+    color: #fff;
+    background-color: #8b0b20;
+    border-color: #7f0a1d;
+}
+
+.btn-check:active + .btn-primary:focus,
+.btn-check:checked + .btn-primary:focus,
+.btn-primary.active:focus,
+.btn-primary:active:focus,
+.show > .btn-primary.dropdown-toggle:focus {
+    box-shadow: 0 0 0 .25rem rgba(200, 16, 46, .25);
+}
+
+.btn-primary:disabled {
+    color: #fff;
+    background-color: #c8102e;
+    border-color: #c8102e;
+}
+
+.btn-outline-primary {
+    color: #c8102e;
+    border-color: #c8102e;
+}
+
+.btn-outline-primary:hover {
+    color: #fff;
+    background-color: #c8102e;
+    border-color: #c8102e;
+}
+
+.btn-outline-primary:focus {
+    box-shadow: 0 0 0 .25rem rgba(200, 16, 46, .25);
+}
+
+.btn-outline-primary:active {
+    color: #fff;
+    background-color: #8b0b20;
+    border-color: #8b0b20;
+}
+
+.btn-outline-primary:active:focus {
+    box-shadow: 0 0 0 .25rem rgba(200, 16, 46, .25);
+}
+
+.btn-outline-primary:disabled {
+    color: #c8102e;
+    background-color: transparent;
+}
+
+a {
+    color: #c8102e;
+}
+
+a:hover {
+    color: #a00d25;
+}
+
+.dropdown-item.active {
+    background-color: #c8102e;
+}
+
+.list-group-item.active {
+    color: #fff;
+    background-color: #c8102e;
+    border-color: #c8102e;
+}

@@ -1,0 +1,145 @@
+﻿@model OrderDto
+@{
+    ViewData["Title"] = "View Order";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    // The active lifecycle step: 1..6 = Primljena .. Završena; 0 = cancelled/rejected.
+    var lifecycleStep = Model.StatusId is >= 1 and <= 6 ? Model.StatusId : 0;
+    var progressPercent = lifecycleStep > 0 ? (int)Math.Round(lifecycleStep / 6.0 * 100) : 0;
+    var isNegativeTerminal = Model.StatusId is 7 or 8;
+
+    string BadgeClass(int statusId) => statusId switch
+    {
+        1 => "bg-secondary", // Primljena
+        2 => "bg-info",      // Potvrđena
+        3 => "bg-primary",   // U pripremi
+        4 => "bg-primary",   // Spremna
+        5 => "bg-info",      // U dostavi
+        6 => "bg-success",   // Završena
+        7 => "bg-danger",    // Otkazana
+        8 => "bg-dark",      // Odbijena
+        _ => "bg-secondary"
+    };
+
+    // Animated stripes while the order is moving through the lifecycle (1..5); static green when finished (6).
+    string ProgressBarClass() => Model.StatusId is >= 1 and <= 5
+        ? "progress-bar progress-bar-striped progress-bar-animated bg-primary"
+        : "progress-bar bg-success";
+}
+
+<div class="container col-xl-6 col-xxl-5 px-4 py-3">
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible show fade" role="alert">
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            <strong>Info:</strong> @TempData["SuccessMessage"]
+        </div>
+    }
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-warning alert-dismissible show fade" role="alert">
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            <strong>Info:</strong> @TempData["ErrorMessage"]
+        </div>
+    }
+
+    <div class="row px-0 py-0">
+        <div class="card mb-2 px-0 py-0">
+            <div class="row g-0 d-flex align-items-center">
+                <div class="col-lg">
+                    <div class="card-body py-4 px-md-5">
+                        <fieldset>
+                            <div>
+                                <h4>Order number: <span class="text-muted">@Model.OrderNumber</span></h4>
+                                <hr style="height:2px;border-width:0;color:gray;background-color:gray">
+                                <h5>Created: <span class="float-end text-muted">@Model.DateCreated.ToLongDateString()</span></h5>
+                                <h5>Time created: <span class="float-end text-muted">@Model.DateCreated.ToLongTimeString()</span></h5>
+                                @if (Model.RequestedDatetime.HasValue)
+                                {
+                                    <h5>Requested delivery: <span class="float-end text-muted">@Model.RequestedDatetime.Value.ToShortDateString() @Model.RequestedDatetime.Value.ToShortTimeString()</span></h5>
+                                }
+                                @if (Model.DateCompleted.HasValue)
+                                {
+                                    <h5>Completed: <span class="float-end text-muted">@Model.DateCompleted.Value.ToLongDateString()</span></h5>
+                                }
+                                <h5>Status: <span class="float-end badge @BadgeClass(Model.StatusId)">@Model.StatusName</span></h5>
+                                <h5>Payment status: <span class="float-end badge @(Model.PaymentStatusId == 2 ? "bg-success" : Model.PaymentStatusId == 1 ? "bg-warning" : "bg-secondary")">@Model.PaymentStatusName</span></h5>
+                                @if (!string.IsNullOrEmpty(Model.CancellationReason))
+                                {
+                                    <h5>Reason: <span class="float-end text-muted">@Model.CancellationReason</span></h5>
+                                }
+                                <h5>Shipping: <span class="float-end text-muted">@Model.DeliveryMethodName</span></h5>
+                                <h5>Location: <span class="float-end text-muted">@Model.DeliveryLocation</span></h5>
+                                @if (!string.IsNullOrEmpty(Model.ContactName))
+                                {
+                                    <h5>Contact: <span class="float-end text-muted">@Model.ContactName</span></h5>
+                                }
+                                @if (!string.IsNullOrEmpty(Model.ContactPhone))
+                                {
+                                    <h5>Phone: <span class="float-end text-muted">@Model.ContactPhone</span></h5>
+                                }
+                                <h5>Payment: <span class="float-end text-muted">@Model.PaymentMethodName</span></h5>
+
+                                <hr style="height:2px;border-width:0;color:gray;background-color:gray">
+
+                                @if (!isNegativeTerminal)
+                                {
+                                    <!-- Lifecycle progress: Primljena -> Završena (steps 1..6). -->
+                                    <div class="progress mb-1" style="height: 22px;">
+                                        <div class="@ProgressBarClass()" role="progressbar" style="width: @progressPercent%;" aria-valuenow="@progressPercent" aria-valuemin="0" aria-valuemax="100">
+                                            @Model.StatusName
+                                        </div>
+                                    </div>
+                                    <div class="row text-center small text-muted mb-3">
+                                        <div class="col">Primljena</div>
+                                        <div class="col">Potvrđena</div>
+                                        <div class="col">U pripremi</div>
+                                        <div class="col">Spremna</div>
+                                        <div class="col">U dostavi</div>
+                                        <div class="col">Završena</div>
+                                    </div>
+                                }
+
+                                <ul>
+                                    <li style="list-style-type: none;"><b><span>Item/Price/Amount</span><span class="float-end">Subtotal</span></b></li>
+                                    @foreach (var item in Model.Lines)
+                                    {
+                                        <li>
+                                            @item.Name<br />
+                                            <span class="text-success">@item.BasePrice.ToString("N2") RSD</span> × @item.Amount
+                                            <span class="text-success float-end">@item.PriceString RSD</span>
+                                        </li>
+                                    }
+                                </ul>
+                                <h5><b>Subtotal: </b><span class="text-success float-end">@Model.PriceString RSD</span></h5>
+                                <h5>Shipping: <span class="float-end text-success">+@Model.DeliveryPriceString RSD</span></h5>
+                                @if (Model.DiscountReduction > 0)
+                                {
+                                    <h5>Discount@(!string.IsNullOrEmpty(Model.DiscountName) ? " (" + Model.DiscountName + ")" : ""): <span class="float-end text-success">-@Model.DiscountReduction.ToString("N2") RSD</span></h5>
+                                }
+                                <h5>VAT (20%): <span class="float-end text-success">@Model.TaxString RSD</span></h5>
+
+                                <hr style="height:2px;border-width:0;color:gray;background-color:gray">
+                                <h4><b>Total: </b><span class="text-success float-end">@Model.TotalString RSD</span></h4>
+                                @if (Model.PointsChange.HasValue)
+                                {
+                                    <h6 class="text-muted">Points: <b>@(Model.PointsChange > 0 ? "+" : "")@Model.PointsChange</b></h6>
+                                }
+                            </div>
+
+                            <a asp-controller="Order" asp-action="MyOrders" class="btn btn-outline-primary">Back</a>
+                            @if (Model.StatusId == 1)
+                            {
+                                <form asp-controller="Order" asp-action="CancelOrder" method="post" class="d-inline ms-1"
+                                      onsubmit="return confirm('Are you sure you want to cancel this order?');">
+                                    <input type="hidden" name="id" value="@Model.Id" />
+                                    <button type="submit" class="btn btn-danger">Cancel order</button>
+                                </form>
+                            }
+                        </fieldset>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

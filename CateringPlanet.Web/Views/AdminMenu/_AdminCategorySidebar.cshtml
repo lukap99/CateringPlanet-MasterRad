@@ -1,0 +1,33 @@
+﻿@model IEnumerable<FoodCategoryDto>
+
+@{
+    var selectedCategoryId = ViewData["SelectedCategoryId"] is int sid ? sid : 0;
+    var isComboMenuView = ViewData["IsComboMenuView"] is bool cv && cv;
+    var listItemClass = "list-group-item list-group-item-action";
+    var listItemActiveClass = "list-group-item list-group-item-action active";
+}
+
+<div class="col-12 d-flex flex-column flex-shrink-0 p-3 text-dark bg-light" style="width: 280px;">
+
+    <a asp-controller="AdminMenu" asp-action="CreateFood" class="btn btn-success"><i class="bi bi-plus-circle"> Add item</i></a>
+    <a asp-controller="AdminMenu" asp-action="CreateComboItem" class="btn btn-warning my-1"><i class="bi bi-plus-circle"> Add combo item</i></a>
+    <a asp-controller="AdminMenu" asp-action="CreateCategory" class="btn btn-success mb-1"><i class="bi bi-plus-circle"> Add category</i></a>
+    <a asp-controller="AdminMenu" asp-action="EditCategoryDiscount" class="btn btn-primary"><i class="bi bi-pencil-square"> Edit category discount</i></a>
+    <hr />
+
+    <span class="fs-4 px-5">Categories</span>
+    <hr>
+
+    <div class="list-group">
+        <!-- All food items -->
+        <a asp-controller="AdminMenu" asp-action="Index" class="@(selectedCategoryId == 0 && !isComboMenuView ? listItemActiveClass : listItemClass)">Sva jela</a>
+
+        <!-- Combo menu -->
+        <a asp-controller="AdminMenu" asp-action="ComboMenu" class="@(isComboMenuView ? listItemActiveClass : listItemClass)">Kombo meni</a>
+
+        @foreach (var categoryItem in Model)
+        {
+            <a asp-controller="AdminMenu" asp-action="Index" asp-route-id="@categoryItem.Id" class="@(categoryItem.Id == selectedCategoryId ? listItemActiveClass : listItemClass)">@categoryItem.Name</a>
+        }
+    </div>
+</div>

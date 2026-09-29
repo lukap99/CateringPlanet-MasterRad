@@ -1,0 +1,27 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="container col-xxl-8 px-4 py-5">
+    <div class="row flex-lg-row-reverse align-items-center g-5 py-5">
+        <div class="col-10 col-sm-8 col-lg-6">
+            <img src="~/images/catering-example.png" class="d-block mx-lg-auto img-fluid" alt="Catering example" width="700" height="500" loading="lazy" />
+        </div>
+        <div class="col-lg-6">
+            <h1 class="display-5 fw-bold lh-1 mb-3 text-primary">Ketering Služba</h1>
+            <br />
+            <p class="lead">
+                Sa ove aplikacije možete naručiti dostavu hrane za razne proslave i događaje, rođendani, slave, žurke i slično. Za svakih 500 RSD kojih potrošite na narudžbinu dobijate
+                <i>ketering poen</i> koji možete koristiti da ostvarite popuste za svaku naknadnu kupovinu! Da bi sakupljali i koristili poene, <a asp-controller="Account" asp-action="Register">napravite nalog.</a>
+            </p>
+
+            <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+                <a asp-controller="Menu" asp-action="Index" class="btn btn-primary btn-lg px-4 me-md-2">Menu</a>
+                @if (User.Identity?.IsAuthenticated != true)
+                {
+                    <a asp-controller="Account" asp-action="Login" class="btn btn-outline-secondary btn-lg px-4">Login</a>
+                }
+            </div>
+        </div>
+    </div>
+</div>

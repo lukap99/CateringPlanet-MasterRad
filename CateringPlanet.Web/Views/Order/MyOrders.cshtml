@@ -1,0 +1,94 @@
+@model IEnumerable<OrderDto>
+@{
+    ViewData["Title"] = "My Orders";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    int i = 1;
+
+    // Same status -> badge color mapping as the admin order list.
+    string BadgeClass(int statusId) => statusId switch
+    {
+        1 => "bg-secondary", // Primljena
+        2 => "bg-info",      // Potvrđena
+        3 => "bg-primary",   // U pripremi
+        4 => "bg-primary",   // Spremna
+        5 => "bg-info",      // U dostavi
+        6 => "bg-success",   // Završena
+        7 => "bg-danger",    // Otkazana
+        8 => "bg-dark",      // Odbijena
+        _ => "bg-secondary"
+    };
+}
+
+<div class="container col-xxl-12 px-4 py-5">
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible show fade" role="alert">
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            <strong>Info:</strong> @TempData["SuccessMessage"]
+        </div>
+    }
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-warning alert-dismissible show fade" role="alert">
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            <strong>Info:</strong> @TempData["ErrorMessage"]
+        </div>
+    }
+
+    @if (!Model.Any())
+    {
+        <h2 class="text-center">Niste napravili ni jednu narudžbinu!</h2>
+    }
+    else
+    {
+        <table class="table table-hover table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Order no.</th>
+                    <th scope="col">Date</th>
+                    <th scope="col">Delivery</th>
+                    <th scope="col">Address</th>
+                    <th scope="col">Total</th>
+                    <th scope="col">Payment</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Completed</th>
+                    <th scope="col">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <th scope="row">@i</th>
+                        <td>@item.OrderNumber</td>
+                        <td>@item.DateCreated.ToShortDateString()</td>
+                        <td>@item.DeliveryMethodName</td>
+                        <td>@item.DeliveryLocation</td>
+                        <td>@item.TotalString RSD</td>
+                        <td>
+                            <span class="badge @(item.PaymentStatusId == 2 ? "bg-success" : item.PaymentStatusId == 1 ? "bg-warning" : "bg-secondary")">@item.PaymentStatusName</span>
+                        </td>
+                        <td>
+                            <span class="badge @BadgeClass(item.StatusId)">@item.StatusName</span>
+                        </td>
+                        <td>@(item.DateCompleted?.ToShortDateString() ?? "—")</td>
+                        <td>
+                            <a asp-controller="Order" asp-action="ViewOrder" asp-route-id="@item.Id" class="btn btn-sm btn-outline-success">View Order</a>
+                            @if (item.StatusId == 1)
+                            {
+                                <form asp-controller="Order" asp-action="CancelOrder" method="post" class="d-inline"
+                                      onsubmit="return confirm('Are you sure you want to cancel this order?');">
+                                    <input type="hidden" name="id" value="@item.Id" />
+                                    <button type="submit" class="btn btn-sm btn-outline-danger">Cancel</button>
+                                </form>
+                            }
+                        </td>
+                    </tr>
+                    i++;
+                }
+            </tbody>
+        </table>
+    }
+</div>

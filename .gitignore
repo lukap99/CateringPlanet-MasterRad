@@ -1,0 +1,21 @@
+﻿# Visual Studio
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Build results
+bin/
+obj/
+[Dd]ebug/
+[Rr]elease/
+
+# SQL Server database files
+*.mdf
+*.ldf
+*.bak
+
+# Uploaded images (optional: uncomment to exclude user uploads while keeping placeholders)
+# CateringPlanet.Web/wwwroot/images/**/*
+# !CateringPlanet.Web/wwwroot/images/**/no_image.png

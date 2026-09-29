@@ -1,0 +1,148 @@
+﻿@model OrderDto
+@{
+    ViewData["Title"] = "View Order";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var statuses = ViewData["OrderStatuses"] as IEnumerable<OrderStatusDto> ?? Enumerable.Empty<OrderStatusDto>();
+
+    // Maps an order status id to a Bootstrap badge class (covers all 8 seeded statuses).
+    string BadgeClass(int statusId) => statusId switch
+    {
+        1 => "bg-secondary", // Primljena
+        2 => "bg-info",      // Potvrđena
+        3 => "bg-primary",   // U pripremi
+        4 => "bg-primary",   // Spremna
+        5 => "bg-info",      // U dostavi
+        6 => "bg-success",   // Završena
+        7 => "bg-danger",    // Otkazana
+        8 => "bg-dark",      // Odbijena
+        _ => "bg-secondary"
+    };
+}
+
+<div class="container col-xl-6 col-xxl-5 px-4 py-3">
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-warning alert-dismissible show fade" role="alert">
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            <strong>Info:</strong> @TempData["ErrorMessage"]
+        </div>
+    }
+
+    <div class="card mb-2 px-0 py-0">
+        <div class="card-body py-4 px-md-5">
+            <fieldset>
+                <div>
+                    <h4>Order number: <span class="text-muted">@Model.OrderNumber</span></h4>
+                    <h5>Customer email: <span class="float-end text-muted">@Model.CustomerEmail</span></h5>
+                    <hr style="height:2px;border-width:0;color:gray;background-color:gray">
+                    <h5>Created: <span class="float-end text-muted">@Model.DateCreated.ToLongDateString()</span></h5>
+                    <h5>Time created: <span class="float-end text-muted">@Model.DateCreated.ToLongTimeString()</span></h5>
+                    @if (Model.RequestedDatetime.HasValue)
+                    {
+                        <h5>Requested delivery: <span class="float-end text-muted">@Model.RequestedDatetime.Value.ToShortDateString() @Model.RequestedDatetime.Value.ToShortTimeString()</span></h5>
+                    }
+                    @if (Model.DateCompleted.HasValue)
+                    {
+                        <h5>Completed: <span class="float-end text-muted">@Model.DateCompleted.Value.ToLongDateString()</span></h5>
+                    }
+                    <h5>Status: <span class="float-end badge @BadgeClass(Model.StatusId)">@Model.StatusName</span></h5>
+                    @if (!string.IsNullOrEmpty(Model.CancellationReason))
+                    {
+                        <h5>Reason: <span class="float-end text-muted">@Model.CancellationReason</span></h5>
+                    }
+                    <h5>Payment method: <span class="float-end text-muted">@Model.PaymentMethodName</span></h5>
+                    <h5>Payment status: <span class="float-end badge @(Model.PaymentStatusId == 2 ? "bg-success" : Model.PaymentStatusId == 1 ? "bg-warning" : "bg-secondary")">@Model.PaymentStatusName</span></h5>
+                    <h5>Shipping: <span class="float-end text-muted">@Model.DeliveryMethodName</span></h5>
+                    <h5>Location: <span class="float-end text-muted">@Model.DeliveryLocation</span></h5>
+                    @if (!string.IsNullOrEmpty(Model.ContactName))
+                    {
+                        <h5>Contact: <span class="float-end text-muted">@Model.ContactName</span></h5>
+                    }
+                    @if (!string.IsNullOrEmpty(Model.ContactPhone))
+                    {
+                        <h5>Phone: <span class="float-end text-muted">@Model.ContactPhone</span></h5>
+                    }
+
+                    <hr style="height:2px;border-width:0;color:gray;background-color:gray">
+
+                    <ul>
+                        <li style="list-style-type: none;"><b><span>Item/Price/Amount</span><span class="float-end">Subtotal</span></b></li>
+                        @foreach (var item in Model.Lines)
+                        {
+                            <li>
+                                @item.Name<br />
+                                <span class="text-success">@item.BasePrice.ToString("N2") RSD</span> × @item.Amount
+                                <span class="text-success float-end">@item.PriceString RSD</span>
+                            </li>
+                        }
+                    </ul>
+                    <h5><b>Subtotal: </b><span class="text-success float-end">@Model.PriceString RSD</span></h5>
+                    <h5>Shipping: <span class="float-end text-success">+@Model.DeliveryPriceString RSD</span></h5>
+                    @if (Model.DiscountReduction > 0)
+                    {
+                        <h5>Discount@(!string.IsNullOrEmpty(Model.DiscountName) ? " (" + Model.DiscountName + ")" : ""): <span class="float-end text-success">-@Model.DiscountReduction.ToString("N2") RSD</span></h5>
+                    }
+                    <h5>VAT (20%): <span class="float-end text-success">@Model.TaxString RSD</span></h5>
+
+                    <hr style="height:2px;border-width:0;color:gray;background-color:gray">
+                    <h4><b>Total: </b><span class="text-success float-end">@Model.TotalString RSD</span></h4>
+                    @if (Model.PointsChange.HasValue)
+                    {
+                        <h6 class="text-muted">Points: <b>@(Model.PointsChange > 0 ? "+" : "")@Model.PointsChange</b></h6>
+                    }
+                </div>
+
+                <!-- Any status can be applied at any time (per user decision). -->
+                <form asp-controller="AdminOrder" asp-action="UpdateStatus" method="post" class="mb-3">
+                    <input type="hidden" name="id" value="@Model.Id" />
+                    <div class="row g-2 align-items-end">
+                        <div class="col">
+                            <label for="statusSelect" class="form-label">New status</label>
+                            <select name="statusId" id="statusSelect" class="form-select">
+                                @foreach (var s in statuses)
+                                {
+                                    if (s.Id == Model.StatusId)
+                                    {
+                                        <option value="@s.Id" selected>@s.Name</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@s.Id">@s.Name</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                        <div class="col" id="cancelReasonGroup" style="display:none;">
+                            <label for="cancellationReason" class="form-label">Reason</label>
+                            <input type="text" id="cancellationReason" name="cancellationReason" class="form-control" placeholder="Reason for cancellation/rejection..." />
+                        </div>
+                        <div class="col-auto">
+                            <button type="submit" class="btn btn-primary">Update status</button>
+                        </div>
+                    </div>
+                </form>
+
+                <a asp-controller="AdminOrder" asp-action="Index" class="btn btn-outline-primary">Back</a>
+            </fieldset>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Show the reason box only for the negative terminal statuses (7 = Otkazana, 8 = Odbijena).
+        (function () {
+            var select = document.getElementById('statusSelect');
+            var reasonGroup = document.getElementById('cancelReasonGroup');
+            function toggle() {
+                if (!select || !reasonGroup) return;
+                var value = parseInt(select.value, 10);
+                reasonGroup.style.display = (value === 7 || value === 8) ? '' : 'none';
+            }
+            if (select) {
+                select.addEventListener('change', toggle);
+                toggle();
+            }
+        })();
+    </script>
+}
