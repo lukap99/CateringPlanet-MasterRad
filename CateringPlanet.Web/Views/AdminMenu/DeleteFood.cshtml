@@ -1,6 +1,6 @@
 ﻿@model FoodDto
 @{
-    ViewData["Title"] = "Delete food";
+    ViewData["Title"] = "Brisanje jela";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -9,10 +9,10 @@
         <div class="card-body py-4 px-md-5">
             <form asp-controller="AdminMenu" asp-action="DeleteFood" method="post">
                 <input type="hidden" name="id" value="@Model.Id" />
-                <h4>Are you sure you want to delete <span class="text-muted">"@Model.Name"</span>?</h4>
+                <h4>Da li ste sigurni da želite da obrišete <span class="text-muted">"@Model.Name"</span>?</h4>
                 <hr />
-                <input type="submit" value="Delete" class="btn btn-danger" />
-                <a asp-controller="AdminMenu" asp-action="Index" class="btn btn-primary">Back</a>
+                <input type="submit" value="Obriši" class="btn btn-danger" />
+                <a asp-controller="AdminMenu" asp-action="Index" class="btn btn-primary">Nazad</a>
             </form>
         </div>
     </div>

@@ -1,7 +1,7 @@
 ﻿@model EditAccountViewModel
 
 @{
-    ViewData["Title"] = "Edit account";
+    ViewData["Title"] = "Izmena naloga";
 }
 
 <!-- Edit user details -->
@@ -14,7 +14,7 @@
                 <input type="hidden" asp-for="Id" />
                 <input type="hidden" asp-for="Email" />
 
-                <h4>Edit profile</h4>
+                <h4>Izmeni profil</h4>
 
                 <hr class="bg-dark" />
 
@@ -51,8 +51,8 @@
                 </div>
 
                 <!-- submit -->
-                <button type="submit" class="btn btn-success">Save changes</button>
-                <a asp-controller="Account" asp-action="AccountDetails" class="btn btn-primary">Back</a>
+                <button type="submit" class="btn btn-success">Sačuvaj izmene</button>
+                <a asp-controller="Account" asp-action="AccountDetails" class="btn btn-primary">Nazad</a>
             </form>
 
         </div>

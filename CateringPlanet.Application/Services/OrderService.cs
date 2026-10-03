@@ -1,4 +1,4 @@
-using CateringPlanet.Application.Abstractions;
+﻿using CateringPlanet.Application.Abstractions;
 using CateringPlanet.Application.DTOs;
 using CateringPlanet.Application.Helpers;
 using CateringPlanet.Domain.Entities;
@@ -167,7 +167,7 @@ public class OrderService : IOrderService
     }
 
     /// <inheritdoc />
-    public async Task<int> PlaceOrderAsync(string userId, CartDto cart)
+    public async Task<int> PlaceOrderAsync(string userId, CartDto cart, DateTime? requestedDatetime = null)
     {
         var now = DateTime.Now;
         var itemsSum = cart.Items.Sum(i => i.LineTotal);
@@ -182,7 +182,7 @@ public class OrderService : IOrderService
             OrderNumber = $"ORD-{now:yyyyMMddHHmmssff}",
             UserId = userId,
             DateCreated = now,
-            RequestedDatetime = now,
+            RequestedDatetime = requestedDatetime ?? cart.RequestedDatetime ?? now,
             DeliveryLocation = cart.DeliveryLocation,
             ContactPhone = cart.ContactPhone,
             ContactName = cart.ContactName,

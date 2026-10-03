@@ -1,6 +1,6 @@
-@model IEnumerable<OrderDto>
+﻿@model IEnumerable<OrderDto>
 @{
-    ViewData["Title"] = "My Orders";
+    ViewData["Title"] = "Moje porudžbine";
     Layout = "~/Views/Shared/_Layout.cshtml";
     int i = 1;
 
@@ -24,15 +24,15 @@
     @if (TempData["SuccessMessage"] != null)
     {
         <div class="alert alert-success alert-dismissible show fade" role="alert">
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            <strong>Info:</strong> @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Zatvori"></button>
+            <strong>Informacija:</strong> @TempData["SuccessMessage"]
         </div>
     }
     @if (TempData["ErrorMessage"] != null)
     {
         <div class="alert alert-warning alert-dismissible show fade" role="alert">
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            <strong>Info:</strong> @TempData["ErrorMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Zatvori"></button>
+            <strong>Informacija:</strong> @TempData["ErrorMessage"]
         </div>
     }
 
@@ -46,15 +46,16 @@
             <thead>
                 <tr>
                     <th scope="col">#</th>
-                    <th scope="col">Order no.</th>
-                    <th scope="col">Date</th>
-                    <th scope="col">Delivery</th>
-                    <th scope="col">Address</th>
-                    <th scope="col">Total</th>
-                    <th scope="col">Payment</th>
+                    <th scope="col">Br. porudžbine</th>
+                    <th scope="col">Datum</th>
+                    <th scope="col">Traženo vreme</th>
+                    <th scope="col">Dostava</th>
+                    <th scope="col">Adresa</th>
+                    <th scope="col">Ukupno</th>
+                    <th scope="col">Plaćanje</th>
                     <th scope="col">Status</th>
-                    <th scope="col">Completed</th>
-                    <th scope="col">Action</th>
+                    <th scope="col">Završena</th>
+                    <th scope="col">Akcija</th>
                 </tr>
             </thead>
             <tbody>
@@ -64,6 +65,7 @@
                         <th scope="row">@i</th>
                         <td>@item.OrderNumber</td>
                         <td>@item.DateCreated.ToShortDateString()</td>
+                        <td>@(item.RequestedDatetime?.ToString("dd.MM.yyyy. HH:mm") ?? "—")</td>
                         <td>@item.DeliveryMethodName</td>
                         <td>@item.DeliveryLocation</td>
                         <td>@item.TotalString RSD</td>
@@ -75,13 +77,13 @@
                         </td>
                         <td>@(item.DateCompleted?.ToShortDateString() ?? "—")</td>
                         <td>
-                            <a asp-controller="Order" asp-action="ViewOrder" asp-route-id="@item.Id" class="btn btn-sm btn-outline-success">View Order</a>
+                            <a asp-controller="Order" asp-action="ViewOrder" asp-route-id="@item.Id" class="btn btn-sm btn-outline-success">Pogledaj porudžbinu</a>
                             @if (item.StatusId == 1)
                             {
                                 <form asp-controller="Order" asp-action="CancelOrder" method="post" class="d-inline"
-                                      onsubmit="return confirm('Are you sure you want to cancel this order?');">
+                                      onsubmit="return confirm('Da li ste sigurni da želite da otkažete ovu porudžbinu?');">
                                     <input type="hidden" name="id" value="@item.Id" />
-                                    <button type="submit" class="btn btn-sm btn-outline-danger">Cancel</button>
+                                    <button type="submit" class="btn btn-sm btn-outline-danger">Otkaži</button>
                                 </form>
                             }
                         </td>

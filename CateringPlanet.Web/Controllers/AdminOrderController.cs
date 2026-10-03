@@ -11,19 +11,28 @@ namespace CateringPlanet.Web.Controllers;
 public class AdminOrderController : Controller
 {
     private readonly IOrderService _orderService;
+    private readonly IAccountService _accountService;
 
-    public AdminOrderController(IOrderService orderService)
+    public AdminOrderController(IOrderService orderService, IAccountService accountService)
     {
         _orderService = orderService;
+        _accountService = accountService;
     }
 
     /// <summary>Lists all orders with status filter, free-text search, sorting, and pagination.</summary>
-    public async Task<IActionResult> Index(int? statusId, string? searchString, string? sortOrder, int page = 1)
+    public async Task<IActionResult> Index(int? statusId, string? searchString, string? sortOrder, string? userId, int page = 1)
     {
         ViewData["OrderStatuses"] = await _orderService.GetOrderStatusesAsync();
         ViewData["SelectedStatusId"] = statusId;
 
         var orders = (await _orderService.GetAllOrdersAsync(statusId)).ToList();
+
+        if (!string.IsNullOrEmpty(userId))
+        {
+            orders = orders.Where(o => o.UserId == userId).ToList();
+            ViewData["FilterUserId"] = userId;
+            ViewData["FilterUserName"] = (await _accountService.GetByIdAsync(userId))?.FullName;
+        }
 
         if (!string.IsNullOrEmpty(searchString))
         {

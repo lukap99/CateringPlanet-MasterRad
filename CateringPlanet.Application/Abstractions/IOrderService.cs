@@ -20,7 +20,7 @@ public interface IOrderService
     Task<IEnumerable<OrderDto>> GetAllOrdersAsync(int? statusId = null);
 
     /// <summary>Creates an order from a cart and returns the new order id.</summary>
-    Task<int> PlaceOrderAsync(string userId, CartDto cart);
+    Task<int> PlaceOrderAsync(string userId, CartDto cart, DateTime? requestedDatetime = null);
 
     /// <summary>Gets all order statuses (id + display name).</summary>
     Task<IEnumerable<OrderStatusDto>> GetOrderStatusesAsync();

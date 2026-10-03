@@ -228,10 +228,15 @@ public class AdminMenuController : Controller
         return View();
     }
 
-    /// <summary>Updates a category's discount percent.</summary>
+    /// <summary>Updates a category's name (when provided) and its discount percent.</summary>
     [HttpPost]
-    public async Task<IActionResult> EditCategoryDiscount(int foodCategoryId, decimal discountPercent)
+    public async Task<IActionResult> EditCategoryDiscount(int foodCategoryId, string? name, decimal discountPercent)
     {
+        if (!string.IsNullOrWhiteSpace(name))
+        {
+            await _menuService.UpdateCategoryAsync(foodCategoryId, name);
+        }
+
         await _menuService.UpdateCategoryDiscountAsync(foodCategoryId, discountPercent);
         return RedirectToAction(nameof(Index));
     }

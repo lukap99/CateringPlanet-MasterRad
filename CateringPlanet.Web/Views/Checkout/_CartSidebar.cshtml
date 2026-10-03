@@ -1,4 +1,4 @@
-@model CartDto
+﻿@model CartDto
 @{
     var deliveryMethods = ViewData["DeliveryMethods"] as IEnumerable<DeliveryMethodDto> ?? Enumerable.Empty<DeliveryMethodDto>();
     var paymentMethods = ViewData["PaymentMethods"] as IEnumerable<PaymentMethodDto> ?? Enumerable.Empty<PaymentMethodDto>();
@@ -26,12 +26,18 @@
                     </li>
 
                     <li class="list-group-item d-flex flex-column align-items-left border-0 px-0 pb-0">
-                        <p>Delivery address</p>
+                        <p>Adresa dostave</p>
                         <input type="text" name="deliveryLocation" class="form-control" value="@Model.DeliveryLocation" />
                     </li>
 
                     <li class="list-group-item d-flex flex-column align-items-left border-0 px-0 pb-0">
-                        <p>Shipping</p>
+                        <p>Traženo vreme isporuke</p>
+                        <input type="datetime-local" id="requestedDatetime" name="requestedDatetime" class="form-control" value="@Model.RequestedDatetime?.ToString("yyyy-MM-ddTHH:mm")" />
+                        <small class="form-text text-muted">Ostavite prazno za isporuku što pre.</small>
+                    </li>
+
+                    <li class="list-group-item d-flex flex-column align-items-left border-0 px-0 pb-0">
+                        <p>Dostava</p>
                         <select name="deliveryMethodId" class="form-select">
                             @foreach (var dm in deliveryMethods)
                             {
@@ -53,7 +59,7 @@
                     @if (Model.OrderDiscount != null && Model.OrderDiscount.DiscountPercent > 0)
                     {
                         <li class="list-group-item d-flex justify-content-between align-items-center border-0 px-0">
-                            <span>Discount reduction</span>
+                            <span>Umanjenje popusta</span>
                             <span class="text-success">-@Model.DiscountReductionString RSD</span>
                         </li>
                     }
@@ -61,39 +67,39 @@
                     <hr style="height:2px;border-width:0;color:gray;background-color:gray" />
 
                     <li class="list-group-item d-flex justify-content-between align-items-center border-0 px-0">
-                        <div><strong>Total</strong></div>
+                        <div><strong>Ukupno</strong></div>
                         <span class="text-muted"><strong>@Model.BuyingPriceString RSD</strong></span>
                     </li>
 
                     <li class="list-group-item d-flex justify-content-between align-items-center border-0 px-0">
-                        <span>VAT (20%)</span>
+                        <span>PDV (20%)</span>
                         <span class="text-muted">@((Model.BuyingPrice * 20m / 100m).ToString("N2")) RSD</span>
                     </li>
 
                     <li class="list-group-item d-flex justify-content-between align-items-center border-0 px-0">
-                        <div><strong>Points earned</strong></div>
-                        <span class="text-muted"><strong>@Model.PointsDifference points</strong></span>
+                        <div><strong>Osvojeni poeni</strong></div>
+                        <span class="text-muted"><strong>@Model.PointsDifference poena</strong></span>
                     </li>
 
                     <li class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 mb-3">
-                        <div><strong>Your points</strong></div>
-                        <span class="text-muted"><strong>@userPoints points</strong></span>
+                        <div><strong>Vaši poeni</strong></div>
+                        <span class="text-muted"><strong>@userPoints poena</strong></span>
                     </li>
                 </ul>
 
                 @if (User.Identity?.IsAuthenticated != true || !Model.Items.Any())
                 {
-                    <input type="submit" value="Checkout" class="btn btn-primary btn-lg btn-block mb-3" style="width: 100%;" disabled />
+                    <input type="submit" value="Poruči" class="btn btn-primary btn-lg btn-block mb-3" style="width: 100%;" disabled />
                 }
                 else
                 {
-                    <input type="submit" value="Checkout" class="btn btn-primary btn-lg btn-block mb-3" style="width: 100%;" />
+                    <input type="submit" value="Poruči" class="btn btn-primary btn-lg btn-block mb-3" style="width: 100%;" />
                 }
             </form>
 
             @if (Model.Items.Any())
             {
-                <a asp-controller="Checkout" asp-action="EmptyCart" class="btn btn-outline-danger btn-lg btn-block" style="width: 100%;">Empty cart</a>
+                <a asp-controller="Checkout" asp-action="EmptyCart" class="btn btn-outline-danger btn-lg btn-block" style="width: 100%;">Isprazni korpu</a>
             }
         </div>
     </div>

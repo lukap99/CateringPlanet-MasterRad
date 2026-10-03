@@ -37,4 +37,7 @@ public interface ICartService
 
     /// <summary>Stores contact/delivery details captured at checkout.</summary>
     void SetContact(string name, string phone, string location);
+
+    /// <summary>Stores the requested delivery date and time (null = as soon as possible).</summary>
+    void SetRequestedDatetime(DateTime? requestedDatetime);
 }

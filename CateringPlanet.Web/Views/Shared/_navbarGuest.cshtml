@@ -12,17 +12,17 @@
             Ketering Planet
         </a>
 
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Otvori navigaciju">
             <span class="navbar-toggler-icon"></span>
         </button>
 
         <div class="collapse navbar-collapse" id="navbarNavDropdown">
             <ul class="navbar-nav ms-auto fs-5 text-primary">
                 <li class="nav-item">
-                    <a class="nav-link" asp-controller="Home" asp-action="Index">Home</a>
+                    <a class="nav-link" asp-controller="Home" asp-action="Index">Početna</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" asp-controller="Menu" asp-action="Index">Menu</a>
+                    <a class="nav-link" asp-controller="Menu" asp-action="Index">Meni</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" asp-controller="Checkout" asp-action="Index">
@@ -31,17 +31,17 @@
                             <span class="badge rounded-pill bg-primary">@numItemsInCart</span>
                         }
                         <i class="bi bi-cart"></i>
-                        Cart
+                        Korpa
                     </a>
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <i class="bi bi-person-fill"></i>
-                        Login/Register
+                        Login/Registracija
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                         <li><a class="dropdown-item" asp-controller="Account" asp-action="Login">Login</a></li>
-                        <li><a class="dropdown-item" asp-controller="Account" asp-action="Register">Register</a></li>
+                        <li><a class="dropdown-item" asp-controller="Account" asp-action="Register">Registracija</a></li>
                     </ul>
                 </li>
             </ul>

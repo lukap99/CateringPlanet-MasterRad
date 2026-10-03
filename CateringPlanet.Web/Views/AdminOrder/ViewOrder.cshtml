@@ -1,6 +1,6 @@
 ﻿@model OrderDto
 @{
-    ViewData["Title"] = "View Order";
+    ViewData["Title"] = "Pregled porudžbine";
     Layout = "~/Views/Shared/_Layout.cshtml";
     var statuses = ViewData["OrderStatuses"] as IEnumerable<OrderStatusDto> ?? Enumerable.Empty<OrderStatusDto>();
 
@@ -23,8 +23,8 @@
     @if (TempData["ErrorMessage"] != null)
     {
         <div class="alert alert-warning alert-dismissible show fade" role="alert">
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            <strong>Info:</strong> @TempData["ErrorMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Zatvori"></button>
+            <strong>Informacija:</strong> @TempData["ErrorMessage"]
         </div>
     }
 
@@ -32,41 +32,41 @@
         <div class="card-body py-4 px-md-5">
             <fieldset>
                 <div>
-                    <h4>Order number: <span class="text-muted">@Model.OrderNumber</span></h4>
-                    <h5>Customer email: <span class="float-end text-muted">@Model.CustomerEmail</span></h5>
+                    <h4>Broj porudžbine: <span class="text-muted">@Model.OrderNumber</span></h4>
+                    <h5>E-mail kupca: <span class="float-end text-muted">@Model.CustomerEmail</span></h5>
                     <hr style="height:2px;border-width:0;color:gray;background-color:gray">
-                    <h5>Created: <span class="float-end text-muted">@Model.DateCreated.ToLongDateString()</span></h5>
-                    <h5>Time created: <span class="float-end text-muted">@Model.DateCreated.ToLongTimeString()</span></h5>
+                    <h5>Kreirano: <span class="float-end text-muted">@Model.DateCreated.ToLongDateString()</span></h5>
+                    <h5>Vreme kreiranja: <span class="float-end text-muted">@Model.DateCreated.ToLongTimeString()</span></h5>
                     @if (Model.RequestedDatetime.HasValue)
                     {
-                        <h5>Requested delivery: <span class="float-end text-muted">@Model.RequestedDatetime.Value.ToShortDateString() @Model.RequestedDatetime.Value.ToShortTimeString()</span></h5>
+                        <h5>Traženo vreme isporuke: <span class="float-end text-muted">@Model.RequestedDatetime.Value.ToShortDateString() @Model.RequestedDatetime.Value.ToShortTimeString()</span></h5>
                     }
                     @if (Model.DateCompleted.HasValue)
                     {
-                        <h5>Completed: <span class="float-end text-muted">@Model.DateCompleted.Value.ToLongDateString()</span></h5>
+                        <h5>Završeno: <span class="float-end text-muted">@Model.DateCompleted.Value.ToLongDateString()</span></h5>
                     }
                     <h5>Status: <span class="float-end badge @BadgeClass(Model.StatusId)">@Model.StatusName</span></h5>
                     @if (!string.IsNullOrEmpty(Model.CancellationReason))
                     {
-                        <h5>Reason: <span class="float-end text-muted">@Model.CancellationReason</span></h5>
+                        <h5>Razlog: <span class="float-end text-muted">@Model.CancellationReason</span></h5>
                     }
-                    <h5>Payment method: <span class="float-end text-muted">@Model.PaymentMethodName</span></h5>
-                    <h5>Payment status: <span class="float-end badge @(Model.PaymentStatusId == 2 ? "bg-success" : Model.PaymentStatusId == 1 ? "bg-warning" : "bg-secondary")">@Model.PaymentStatusName</span></h5>
-                    <h5>Shipping: <span class="float-end text-muted">@Model.DeliveryMethodName</span></h5>
-                    <h5>Location: <span class="float-end text-muted">@Model.DeliveryLocation</span></h5>
+                    <h5>Način plaćanja: <span class="float-end text-muted">@Model.PaymentMethodName</span></h5>
+                    <h5>Status plaćanja: <span class="float-end badge @(Model.PaymentStatusId == 2 ? "bg-success" : Model.PaymentStatusId == 1 ? "bg-warning" : "bg-secondary")">@Model.PaymentStatusName</span></h5>
+                    <h5>Dostava: <span class="float-end text-muted">@Model.DeliveryMethodName</span></h5>
+                    <h5>Lokacija: <span class="float-end text-muted">@Model.DeliveryLocation</span></h5>
                     @if (!string.IsNullOrEmpty(Model.ContactName))
                     {
-                        <h5>Contact: <span class="float-end text-muted">@Model.ContactName</span></h5>
+                        <h5>Kontakt: <span class="float-end text-muted">@Model.ContactName</span></h5>
                     }
                     @if (!string.IsNullOrEmpty(Model.ContactPhone))
                     {
-                        <h5>Phone: <span class="float-end text-muted">@Model.ContactPhone</span></h5>
+                        <h5>Telefon: <span class="float-end text-muted">@Model.ContactPhone</span></h5>
                     }
 
                     <hr style="height:2px;border-width:0;color:gray;background-color:gray">
 
                     <ul>
-                        <li style="list-style-type: none;"><b><span>Item/Price/Amount</span><span class="float-end">Subtotal</span></b></li>
+                        <li style="list-style-type: none;"><b><span>Stavka/Cena/Količina</span><span class="float-end">Međuzbir</span></b></li>
                         @foreach (var item in Model.Lines)
                         {
                             <li>
@@ -76,19 +76,19 @@
                             </li>
                         }
                     </ul>
-                    <h5><b>Subtotal: </b><span class="text-success float-end">@Model.PriceString RSD</span></h5>
-                    <h5>Shipping: <span class="float-end text-success">+@Model.DeliveryPriceString RSD</span></h5>
+                    <h5><b>Međuzbir: </b><span class="text-success float-end">@Model.PriceString RSD</span></h5>
+                    <h5>Dostava: <span class="float-end text-success">+@Model.DeliveryPriceString RSD</span></h5>
                     @if (Model.DiscountReduction > 0)
                     {
-                        <h5>Discount@(!string.IsNullOrEmpty(Model.DiscountName) ? " (" + Model.DiscountName + ")" : ""): <span class="float-end text-success">-@Model.DiscountReduction.ToString("N2") RSD</span></h5>
+                        <h5>Popust@(!string.IsNullOrEmpty(Model.DiscountName) ? " (" + Model.DiscountName + ")" : ""): <span class="float-end text-success">-@Model.DiscountReduction.ToString("N2") RSD</span></h5>
                     }
                     <h5>VAT (20%): <span class="float-end text-success">@Model.TaxString RSD</span></h5>
 
                     <hr style="height:2px;border-width:0;color:gray;background-color:gray">
-                    <h4><b>Total: </b><span class="text-success float-end">@Model.TotalString RSD</span></h4>
+                    <h4><b>Ukupno: </b><span class="text-success float-end">@Model.TotalString RSD</span></h4>
                     @if (Model.PointsChange.HasValue)
                     {
-                        <h6 class="text-muted">Points: <b>@(Model.PointsChange > 0 ? "+" : "")@Model.PointsChange</b></h6>
+                        <h6 class="text-muted">Poeni: <b>@(Model.PointsChange > 0 ? "+" : "")@Model.PointsChange</b></h6>
                     }
                 </div>
 
@@ -97,7 +97,7 @@
                     <input type="hidden" name="id" value="@Model.Id" />
                     <div class="row g-2 align-items-end">
                         <div class="col">
-                            <label for="statusSelect" class="form-label">New status</label>
+                            <label for="statusSelect" class="form-label">Novi status</label>
                             <select name="statusId" id="statusSelect" class="form-select">
                                 @foreach (var s in statuses)
                                 {
@@ -113,16 +113,16 @@
                             </select>
                         </div>
                         <div class="col" id="cancelReasonGroup" style="display:none;">
-                            <label for="cancellationReason" class="form-label">Reason</label>
-                            <input type="text" id="cancellationReason" name="cancellationReason" class="form-control" placeholder="Reason for cancellation/rejection..." />
+                            <label for="cancellationReason" class="form-label">Razlog</label>
+                            <input type="text" id="cancellationReason" name="cancellationReason" class="form-control" placeholder="Razlog za otkazivanje/odbijanje..." />
                         </div>
                         <div class="col-auto">
-                            <button type="submit" class="btn btn-primary">Update status</button>
+                            <button type="submit" class="btn btn-primary">Ažuriraj status</button>
                         </div>
                     </div>
                 </form>
 
-                <a asp-controller="AdminOrder" asp-action="Index" class="btn btn-outline-primary">Back</a>
+                <a asp-controller="AdminOrder" asp-action="Index" class="btn btn-outline-primary">Nazad</a>
             </fieldset>
         </div>
     </div>

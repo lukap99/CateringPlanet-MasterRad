@@ -1,0 +1,50 @@
+﻿@model UserDto
+@{
+    ViewData["Title"] = "Menadžer - profil";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!-- Admin view of a single manager profile -->
+<div class="container col-5 py-5">
+
+    <div class="card">
+        <div class="card-body py-4 px-4">
+
+            <h3>Menadžer</h3>
+
+            <div class="mb-3">
+                <div class="text-muted" style="font-size: 0.8em;">Id</div>
+                <div style="font-size: 1.1em">@Model.Id</div>
+            </div>
+
+            <div class="mb-3">
+                <div class="text-muted" style="font-size: 0.8em;">Ime</div>
+                <div style="font-size: 1.1em">@Model.FirstName</div>
+            </div>
+
+            <div class="mb-3">
+                <div class="text-muted" style="font-size: 0.8em;">Prezime</div>
+                <div style="font-size: 1.1em">@Model.LastName</div>
+            </div>
+
+            <div class="mb-3">
+                <div class="text-muted" style="font-size: 0.8em;">E-mail</div>
+                <div style="font-size: 1.1em">@Model.Email</div>
+            </div>
+
+            <div class="mb-3">
+                <div class="text-muted" style="font-size: 0.8em;">Telefon</div>
+                <div style="font-size: 1.1em">@(string.IsNullOrEmpty(Model.Phone) ? "-" : Model.Phone)</div>
+            </div>
+
+            <div class="mb-3">
+                <div class="text-muted" style="font-size: 0.8em;">Adresa</div>
+                <div style="font-size: 1.1em">@(string.IsNullOrEmpty(Model.Address) ? "-" : Model.Address)</div>
+            </div>
+
+            <a asp-controller="AdminUser" asp-action="EditManagerProfile" asp-route-id="@Model.Id" class="btn btn-primary">Izmeni menadžera</a>
+            <a asp-controller="AdminUser" asp-action="Managers" class="btn btn-outline-primary">Nazad</a>
+
+        </div>
+    </div>
+</div>

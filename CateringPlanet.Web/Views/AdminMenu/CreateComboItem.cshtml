@@ -1,6 +1,6 @@
-@model ComboMenuDto
+﻿@model ComboMenuDto
 @{
-    ViewData["Title"] = "Create combo";
+    ViewData["Title"] = "Kreiraj combo";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -8,7 +8,7 @@
     <div class="card mb-2 px-0">
         <div class="card-body py-4 px-md-5">
             <form asp-controller="AdminMenu" asp-action="CreateComboItem" method="post" enctype="multipart/form-data">
-                <h4>Create combo</h4>
+                <h4>Kreiraj combo</h4>
                 <hr />
 
                 <div class="mb-3">
@@ -17,7 +17,7 @@
                 </div>
 
                 <div class="mb-3">
-                    <label asp-for="Price" class="form-label">Base price</label>
+                    <label asp-for="Price" class="form-label">Osnovna cena</label>
                     <div class="input-group">
                         <input asp-for="Price" type="number" min="1" step="0.01" class="form-control" />
                         <span class="input-group-text">RSD</span>
@@ -25,7 +25,7 @@
                 </div>
 
                 <div class="mb-3">
-                    <label asp-for="DiscountPercent" class="form-label">Discount</label>
+                    <label asp-for="DiscountPercent" class="form-label">Popust</label>
                     <div class="input-group">
                         <input asp-for="DiscountPercent" type="number" min="0" max="100" step="0.01" class="form-control" />
                         <span class="input-group-text">%</span>
@@ -33,14 +33,14 @@
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label">Image</label>
+                    <label class="form-label">Slika</label>
                     <input type="file" name="imageFile" id="imageFile" class="form-control" accept=".jpg,.jpeg,.png,.gif,.webp" />
                     <div class="form-text">JPG/PNG/GIF/WebP, max 15 MB.</div>
                     @if (ViewData.ModelState["imageFile"]?.Errors.Any() == true)
                     {
                         <span class="text-danger">@ViewData.ModelState["imageFile"].Errors.First().ErrorMessage</span>
                     }
-                    <img id="imagePreview" class="img-thumbnail mt-2" style="max-height: 200px; display: none;" alt="Image preview" />
+                    <img id="imagePreview" class="img-thumbnail mt-2" style="max-height: 200px; display: none;" alt="Prikaz slike" />
                 </div>
 
                 <div class="mb-3 form-check">
@@ -48,8 +48,8 @@
                     <label asp-for="IsVisible" class="form-check-label"></label>
                 </div>
 
-                <input type="submit" value="Create combo" class="btn btn-success" />
-                <a asp-controller="AdminMenu" asp-action="Index" class="btn btn-outline-primary">Back</a>
+                <input type="submit" value="Kreiraj combo" class="btn btn-success" />
+                <a asp-controller="AdminMenu" asp-action="Index" class="btn btn-outline-primary">Nazad</a>
             </form>
         </div>
     </div>

@@ -21,7 +21,7 @@
                     <h5 class="card-title">
                         @if (Model.DiscountPercent > 0)
                         {
-                            <span class="text-warning">(@Model.DiscountPercent.ToString()% OFF!)</span>
+                            <span class="text-warning">(@Model.DiscountPercent.ToString()% popust!)</span>
                         }
                         @Model.Name
                     </h5>
@@ -34,18 +34,18 @@
 
             <div class="col text-center">
                 <h6>
-                    Category
+                    Kategorija
                     @if (Model.CategoryDiscountPercent > 0)
                     {
                         <br />
-                        <span class="text-warning">(@Model.CategoryDiscountPercent.ToString()% OFF!)</span>
+                        <span class="text-warning">(@Model.CategoryDiscountPercent.ToString()% popust!)</span>
                     }
                 </h6>
                 <p class="text-muted">@Model.FoodCategoryName</p>
             </div>
 
             <div class="col text-center">
-                <h6>Quantity</h6>
+                <h6>Broj</h6>
                 <p>@Model.UnitOfMeasurement</p>
                 <input type="number" name="Amount" value="@Model.Amount" min="1" class="form-control mx-auto w-50" />
             </div>
@@ -56,7 +56,7 @@
                     <h6 class="text-muted text-decoration-line-through">@Model.PriceString RSD</h6>
                 }
                 <h5 class="text-success"><b>@Model.SellingPriceString RSD</b></h5>
-                <button type="submit" class="btn btn-outline-success"><i class="bi bi-cart-plus"> Add to cart</i></button>
+                <button type="submit" class="btn btn-outline-success"><i class="bi bi-cart-plus"> Dodaj u korpu</i></button>
             </div>
         </div>
     </form>

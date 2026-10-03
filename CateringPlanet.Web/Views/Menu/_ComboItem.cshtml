@@ -20,7 +20,7 @@
                 <div style="word-wrap: break-word;">
                     @if (Model.DiscountPercent > 0)
                     {
-                        <h5 class="text-warning fw-bold">(@Model.DiscountPercent.ToString()% OFF!)</h5>
+                        <h5 class="text-warning fw-bold">(@Model.DiscountPercent.ToString()% popust!)</h5>
                     }
                     <h5>@Model.Name</h5>
                     @if (Model.Items.Any())
@@ -31,7 +31,7 @@
             </div>
 
             <div class="col text-center">
-                <h5>Price</h5>
+                <h5>Cena</h5>
                 @if (Model.DiscountPercent > 0)
                 {
                     <h5 class="text-success text-decoration-line-through">@Model.PriceString RSD</h5>
@@ -40,9 +40,9 @@
             </div>
 
             <div class="col px-auto text-center">
-                <h6>Quantity</h6>
+                <h6>Broj</h6>
                 <input type="number" name="Amount" value="@Model.Amount" min="1" class="form-control mb-2 mx-auto w-50" />
-                <button type="submit" class="btn btn-outline-success"><i class="bi bi-cart-plus"> Add to cart</i></button>
+                <button type="submit" class="btn btn-outline-success"><i class="bi bi-cart-plus"> Dodaj u korpu</i></button>
             </div>
         </div>
     </form>

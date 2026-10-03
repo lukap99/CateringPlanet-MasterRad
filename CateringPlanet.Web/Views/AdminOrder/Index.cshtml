@@ -1,6 +1,6 @@
-@model IEnumerable<OrderDto>
+﻿@model IEnumerable<OrderDto>
 @{
-    ViewData["Title"] = "All Orders";
+    ViewData["Title"] = "Sve porudžbine";
     Layout = "~/Views/Shared/_Layout.cshtml";
 
     var statuses = ViewData["OrderStatuses"] as IEnumerable<OrderStatusDto> ?? Enumerable.Empty<OrderStatusDto>();
@@ -11,6 +11,8 @@
     var pageSize = ViewData["PageSize"] as int? ?? 10;
     var totalItems = ViewData["TotalItems"] as int? ?? 0;
     var totalPages = ViewData["TotalPages"] as int? ?? 1;
+    var filterUserId = ViewData["FilterUserId"] as string;
+    var filterUserName = ViewData["FilterUserName"] as string;
 
     // Maps an order status id to a Bootstrap badge class (covers all 8 seeded statuses).
     string BadgeClass(int statusId) => statusId switch
@@ -31,27 +33,43 @@
 }
 
 <div class="container col-xxl-12 px-4 py-5">
-    <h2>Orders</h2>
+    <h2>Porudžbine</h2>
+
+    @if (!string.IsNullOrEmpty(filterUserId))
+    {
+        <div class="alert alert-info py-2">
+            Prikazane narudžbine korisnika: <strong>@filterUserName</strong>
+            <a asp-controller="AdminOrder" asp-action="Index" class="alert-link ms-2">Ukloni filter</a>
+        </div>
+    }
 
     <!-- Search form -->
     <form method="get" asp-controller="AdminOrder" asp-action="Index" class="mb-3">
         <input type="hidden" name="statusId" value="@selectedStatusId" />
+        @if (!string.IsNullOrEmpty(filterUserId))
+        {
+            <input type="hidden" name="userId" value="@filterUserId" />
+        }
         <div class="input-group">
-            <input type="text" name="searchString" value="@currentFilter" class="form-control" placeholder="Search by order ID, number, customer name or email..." />
-            <button type="submit" class="btn btn-primary">Search</button>
+            <input type="text" name="searchString" value="@currentFilter" class="form-control" placeholder="Pretraži po ID-ju, broju porudžbine, imenu kupca ili e-mailu..." />
+            <button type="submit" class="btn btn-primary">Pretraži</button>
             @if (!string.IsNullOrEmpty(currentFilter))
             {
-                <a asp-controller="AdminOrder" asp-action="Index" asp-route-statusId="@selectedStatusId" class="btn btn-secondary">Clear</a>
+                <a asp-controller="AdminOrder" asp-action="Index" asp-route-statusId="@selectedStatusId" asp-route-userId="@filterUserId" class="btn btn-secondary">Očisti</a>
             }
         </div>
     </form>
 
     <!-- Status filter -->
     <form method="get" asp-controller="AdminOrder" asp-action="Index" class="row g-2 align-items-end mb-3">
+        @if (!string.IsNullOrEmpty(filterUserId))
+        {
+            <input type="hidden" name="userId" value="@filterUserId" />
+        }
         <div class="col-auto">
-            <label for="statusFilter" class="form-label">Filter by status</label>
+            <label for="statusFilter" class="form-label">Filtriraj po statusu</label>
             <select id="statusFilter" name="statusId" class="form-select">
-                <option value="">All statuses</option>
+                <option value="">Svi statusi</option>
                 @foreach (var s in statuses)
                 {
                     if (selectedStatusId.HasValue && s.Id == selectedStatusId.Value)
@@ -66,7 +84,7 @@
             </select>
         </div>
         <div class="col-auto">
-            <button type="submit" class="btn btn-primary">Filter</button>
+            <button type="submit" class="btn btn-primary">Filtriraj</button>
         </div>
     </form>
 
@@ -74,19 +92,19 @@
         <thead>
             <tr>
                 <th>
-                    <a asp-controller="AdminOrder" asp-action="Index" asp-route-statusId="@selectedStatusId" asp-route-searchString="@currentFilter" asp-route-sortOrder="@(currentSort == "orderId_asc" ? "orderId_desc" : "orderId_asc")">Order ID @Arrow("orderId_asc", "orderId_desc")</a>
+                    <a asp-controller="AdminOrder" asp-action="Index" asp-route-statusId="@selectedStatusId" asp-route-searchString="@currentFilter" asp-route-userId="@filterUserId" asp-route-sortOrder="@(currentSort == "orderId_asc" ? "orderId_desc" : "orderId_asc")">ID porudžbine @Arrow("orderId_asc", "orderId_desc")</a>
                 </th>
-                <th>Order number</th>
+                <th>Broj porudžbine</th>
                 <th>
-                    <a asp-controller="AdminOrder" asp-action="Index" asp-route-statusId="@selectedStatusId" asp-route-searchString="@currentFilter" asp-route-sortOrder="@(currentSort == "customer_asc" ? "customer_desc" : "customer_asc")">Customer @Arrow("customer_asc", "customer_desc")</a>
-                </th>
-                <th>
-                    <a asp-controller="AdminOrder" asp-action="Index" asp-route-statusId="@selectedStatusId" asp-route-searchString="@currentFilter" asp-route-sortOrder="@(currentSort == "date_asc" ? "date_desc" : "date_asc")">Date Created @Arrow("date_asc", "date_desc")</a>
+                    <a asp-controller="AdminOrder" asp-action="Index" asp-route-statusId="@selectedStatusId" asp-route-searchString="@currentFilter" asp-route-userId="@filterUserId" asp-route-sortOrder="@(currentSort == "customer_asc" ? "customer_desc" : "customer_asc")">Kupac @Arrow("customer_asc", "customer_desc")</a>
                 </th>
                 <th>
-                    <a asp-controller="AdminOrder" asp-action="Index" asp-route-statusId="@selectedStatusId" asp-route-searchString="@currentFilter" asp-route-sortOrder="@(currentSort == "total_asc" ? "total_desc" : "total_asc")">Total @Arrow("total_asc", "total_desc")</a>
+                    <a asp-controller="AdminOrder" asp-action="Index" asp-route-statusId="@selectedStatusId" asp-route-searchString="@currentFilter" asp-route-userId="@filterUserId" asp-route-sortOrder="@(currentSort == "date_asc" ? "date_desc" : "date_asc")">Datum kreiranja @Arrow("date_asc", "date_desc")</a>
                 </th>
-                <th>Payment</th>
+                <th>
+                    <a asp-controller="AdminOrder" asp-action="Index" asp-route-statusId="@selectedStatusId" asp-route-searchString="@currentFilter" asp-route-userId="@filterUserId" asp-route-sortOrder="@(currentSort == "total_asc" ? "total_desc" : "total_asc")">Ukupno @Arrow("total_asc", "total_desc")</a>
+                </th>
+                <th>Plaćanje</th>
                 <th>Status</th>
                 <th></th>
             </tr>
@@ -107,7 +125,7 @@
                         <span class="badge @BadgeClass(order.StatusId)">@order.StatusName</span>
                     </td>
                     <td>
-                        <a asp-controller="AdminOrder" asp-action="ViewOrder" asp-route-id="@order.Id" class="btn btn-sm btn-info">View</a>
+                        <a asp-controller="AdminOrder" asp-action="ViewOrder" asp-route-id="@order.Id" class="btn btn-sm btn-info">Pogledaj</a>
                     </td>
                 </tr>
             }
@@ -116,25 +134,25 @@
 
     <div class="d-flex justify-content-between align-items-center mt-2">
         <div class="text-muted small">
-            Showing @((currentPage - 1) * pageSize + 1) to @Math.Min(currentPage * pageSize, totalItems) of @totalItems orders
+            Prikazano @((currentPage - 1) * pageSize + 1) do @Math.Min(currentPage * pageSize, totalItems) od @totalItems porudžbina
         </div>
     </div>
 
     @if (totalPages > 1)
     {
-        <nav aria-label="Orders pagination">
+        <nav aria-label="Paginacija porudžbina">
             <ul class="pagination justify-content-center">
                 <li class="page-item @(currentPage == 1 ? "disabled" : "")">
-                    <a class="page-link" asp-controller="AdminOrder" asp-action="Index" asp-route-statusId="@selectedStatusId" asp-route-searchString="@currentFilter" asp-route-sortOrder="@currentSort" asp-route-page="@(currentPage - 1)">Previous</a>
+                    <a class="page-link" asp-controller="AdminOrder" asp-action="Index" asp-route-statusId="@selectedStatusId" asp-route-searchString="@currentFilter" asp-route-userId="@filterUserId" asp-route-sortOrder="@currentSort" asp-route-page="@(currentPage - 1)">Prethodna</a>
                 </li>
                 @for (int pageNum = 1; pageNum <= totalPages; pageNum++)
                 {
                     <li class="page-item @(pageNum == currentPage ? "active" : "")">
-                        <a class="page-link" asp-controller="AdminOrder" asp-action="Index" asp-route-statusId="@selectedStatusId" asp-route-searchString="@currentFilter" asp-route-sortOrder="@currentSort" asp-route-page="@pageNum">@pageNum</a>
+                        <a class="page-link" asp-controller="AdminOrder" asp-action="Index" asp-route-statusId="@selectedStatusId" asp-route-searchString="@currentFilter" asp-route-userId="@filterUserId" asp-route-sortOrder="@currentSort" asp-route-page="@pageNum">@pageNum</a>
                     </li>
                 }
                 <li class="page-item @(currentPage == totalPages ? "disabled" : "")">
-                    <a class="page-link" asp-controller="AdminOrder" asp-action="Index" asp-route-statusId="@selectedStatusId" asp-route-searchString="@currentFilter" asp-route-sortOrder="@currentSort" asp-route-page="@(currentPage + 1)">Next</a>
+                    <a class="page-link" asp-controller="AdminOrder" asp-action="Index" asp-route-statusId="@selectedStatusId" asp-route-searchString="@currentFilter" asp-route-userId="@filterUserId" asp-route-sortOrder="@currentSort" asp-route-page="@(currentPage + 1)">Sledeća</a>
                 </li>
             </ul>
         </nav>

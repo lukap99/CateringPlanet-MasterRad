@@ -12,7 +12,7 @@
                 <h5 class="card-title">
                     @if (Model.DiscountPercent > 0)
                     {
-                        <br><span class="text-warning">(@Model.DiscountPercent.ToString()% OFF!)</span>
+                        <br><span class="text-warning">(@Model.DiscountPercent.ToString()% popust!)</span>
                     }
                     @Model.Name
                 </h5>
@@ -25,27 +25,27 @@
 
         <div class="col text-center">
             <h6>
-                Category
+                Kategorija
                 @if (Model.CategoryDiscountPercent > 0)
                 {
                     <br>
-                    <span class="text-warning">(@Model.CategoryDiscountPercent.ToString()% OFF!)</span>
+                    <span class="text-warning">(@Model.CategoryDiscountPercent.ToString()% popust!)</span>
                 }
             </h6>
             <p class="text-muted">@Model.FoodCategoryName</p>
-            <p><b>Quantity: </b>@Model.UnitOfMeasurement</p>
+            <p><b>Broj: </b>@Model.UnitOfMeasurement</p>
         </div>
 
         <div class="col text-center">
-            <h5>Base price</h5>
+            <h5>Osnovna cena</h5>
             <h5 class="text-success">@Model.PriceString RSD</h5>
-            <h5>Selling price</h5>
+            <h5>Prodajna cena</h5>
             <h4 class="text-success"><b>@Model.SellingPriceString RSD</b></h4>
         </div>
 
         <div class="col d-grid gap-2 p-5">
-            <a class="btn btn-success" asp-controller="AdminMenu" asp-action="EditFood" asp-route-id="@Model.Id"><i class="bi bi-pencil-square"> Edit item</i></a>
-            <a class="btn btn-danger" asp-controller="AdminMenu" asp-action="DeleteFood" asp-route-id="@Model.Id"><i class="bi bi-trash-fill"> Delete item</i></a>
+            <a class="btn btn-success" asp-controller="AdminMenu" asp-action="EditFood" asp-route-id="@Model.Id"><i class="bi bi-pencil-square"> Izmeni stavku</i></a>
+            <a class="btn btn-danger" asp-controller="AdminMenu" asp-action="DeleteFood" asp-route-id="@Model.Id"><i class="bi bi-trash-fill"> Obriši stavku</i></a>
         </div>
 
     </div>

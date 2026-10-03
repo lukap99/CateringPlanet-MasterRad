@@ -7,8 +7,8 @@ namespace CateringPlanet.Application.Abstractions;
 /// </summary>
 public interface IMenuService
 {
-    /// <summary>Gets visible foods, optionally filtered to a category.</summary>
-    Task<IEnumerable<FoodDto>> GetVisibleFoodsAsync(int? categoryId);
+    /// <summary>Gets visible foods, optionally filtered to a category and/or by name.</summary>
+    Task<IEnumerable<FoodDto>> GetVisibleFoodsAsync(int? categoryId, string? searchString = null);
 
     /// <summary>Gets all foods in a category (visible or not).</summary>
     Task<IEnumerable<FoodDto>> GetFoodsByCategoryAsync(int categoryId);
@@ -45,6 +45,9 @@ public interface IMenuService
 
     /// <summary>Updates a category's discount percent.</summary>
     Task UpdateCategoryDiscountAsync(int categoryId, decimal discountPercent);
+
+    /// <summary>Updates a category's name; the slug is intentionally kept unchanged.</summary>
+    Task UpdateCategoryAsync(int categoryId, string name);
 
     /// <summary>Creates a combo menu and returns its new id.</summary>
     Task<int> CreateComboAsync(ComboMenuDto combo);

@@ -19,28 +19,30 @@ public class MenuController : Controller
     }
 
     /// <summary>
-    /// Shows visible foods (optionally filtered by category) plus combo menus.
+    /// Shows visible foods (optionally filtered by category or name) plus combo menus.
     /// </summary>
     /// <param name="id">Optional category id; null/0 shows all items.</param>
-    public async Task<IActionResult> Index(int? id)
+    /// <param name="searchString">Optional text to filter foods by name.</param>
+    public async Task<IActionResult> Index(int? id, string? searchString)
     {
         // selectedCategoryId: 0 = all items, >0 = specific category.
         var selectedCategoryId = id is > 0 ? id.Value : 0;
 
         ViewData["SelectedCategoryId"] = selectedCategoryId;
         ViewData["IsComboMenuView"] = false;
+        ViewData["CurrentFilter"] = searchString;
 
         IEnumerable<FoodDto> foods;
         IEnumerable<ComboMenuDto> combos;
 
         if (selectedCategoryId <= 0)
         {
-            foods = await _menuService.GetVisibleFoodsAsync(null);
+            foods = await _menuService.GetVisibleFoodsAsync(null, searchString);
             combos = await _menuService.GetVisibleCombosAsync();
         }
         else
         {
-            foods = await _menuService.GetVisibleFoodsAsync(selectedCategoryId);
+            foods = await _menuService.GetVisibleFoodsAsync(selectedCategoryId, searchString);
             combos = Array.Empty<ComboMenuDto>();
         }
 

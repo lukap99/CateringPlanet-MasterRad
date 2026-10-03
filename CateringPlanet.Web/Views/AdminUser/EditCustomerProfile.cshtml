@@ -1,0 +1,53 @@
+﻿@model UserDto
+@{
+    ViewData["Title"] = "Izmena korisnika";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!-- Admin edit of a customer profile -->
+<div class="container col-5 py-5">
+
+    <div class="card">
+        <div class="card-body py-4 px-4">
+
+            <form asp-controller="AdminUser" asp-action="EditCustomerProfile" method="post">
+                <input type="hidden" name="id" value="@Model.Id" />
+
+                <h4>Izmeni korisnika</h4>
+
+                <hr class="bg-dark" />
+
+                <div class="row">
+                    <!-- Ime -->
+                    <div class="col">
+                        <label class="form-label">Ime</label>
+                        <input name="firstName" value="@Model.FirstName" class="form-control" />
+                    </div>
+
+                    <!-- Prezime -->
+                    <div class="col mb-3">
+                        <label class="form-label">Prezime</label>
+                        <input name="lastName" value="@Model.LastName" class="form-control" />
+                    </div>
+                </div>
+
+                <!-- Telefon -->
+                <div class="mb-3">
+                    <label class="form-label">Telefon</label>
+                    <input name="phone" value="@Model.Phone" class="form-control" placeholder="xxx-yyy-zzz" />
+                </div>
+
+                <!-- Adresa -->
+                <div class="mb-3">
+                    <label class="form-label">Adresa</label>
+                    <input name="address" value="@Model.Address" class="form-control" />
+                </div>
+
+                <!-- submit -->
+                <button type="submit" class="btn btn-success">Sačuvaj izmene</button>
+                <a asp-controller="AdminUser" asp-action="ViewUser" asp-route-id="@Model.Id" class="btn btn-primary">Nazad</a>
+            </form>
+
+        </div>
+    </div>
+</div>

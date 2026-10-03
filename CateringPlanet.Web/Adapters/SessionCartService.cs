@@ -149,6 +149,14 @@ public class SessionCartService : ICartService
         Save(cart);
     }
 
+    /// <inheritdoc />
+    public void SetRequestedDatetime(DateTime? requestedDatetime)
+    {
+        var cart = GetCart();
+        cart.RequestedDatetime = requestedDatetime;
+        Save(cart);
+    }
+
     private void Save(CartDto cart) => Session.SetString(CartKey, JsonSerializer.Serialize(cart));
 
     private static void Recalculate(CartDto cart)

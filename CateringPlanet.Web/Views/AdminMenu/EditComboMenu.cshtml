@@ -1,6 +1,6 @@
-@model ComboMenuDto
+﻿@model ComboMenuDto
 @{
-    ViewData["Title"] = "Edit combo menu";
+    ViewData["Title"] = "Izmena combo menija";
     Layout = "~/Views/Shared/_Layout.cshtml";
     var foods = ViewData["Foods"] as IEnumerable<FoodDto> ?? Enumerable.Empty<FoodDto>();
     var categories = ViewData["Categories"] as IEnumerable<FoodCategoryDto> ?? Enumerable.Empty<FoodCategoryDto>();
@@ -9,7 +9,7 @@
 }
 
 <div class="container px-5 py-4">
-    <h3>Edit Combo: <span class="text-primary">@Model.Name</span></h3>
+    <h3>Izmena comba: <span class="text-primary">@Model.Name</span></h3>
     <hr />
 
     <div class="row">
@@ -17,19 +17,19 @@
         <!-- Left column: details + current items -->
         <div class="col-4">
             <div class="card mb-3 px-0">
-                <div class="card-header"><h5 class="mb-0">Combo Details</h5></div>
+                <div class="card-header"><h5 class="mb-0">Detalji comba</h5></div>
                 <div class="card-body">
                     <form asp-controller="AdminMenu" asp-action="EditComboMenu" method="post" enctype="multipart/form-data">
                         <input type="hidden" asp-for="Id" />
                         <input type="hidden" asp-for="ImageFileName" />
 
                         <div class="mb-3">
-                            <label asp-for="Name" class="form-label">Name</label>
+                            <label asp-for="Name" class="form-label">Naziv</label>
                             <input asp-for="Name" class="form-control" />
                         </div>
 
                         <div class="mb-3">
-                            <label asp-for="Price" class="form-label">Base price</label>
+                            <label asp-for="Price" class="form-label">Osnovna cena</label>
                             <div class="input-group">
                                 <input asp-for="Price" type="number" min="1" step="0.01" class="form-control" />
                                 <span class="input-group-text">RSD</span>
@@ -37,18 +37,18 @@
                         </div>
 
                         <div class="mb-3">
-                            <label class="form-label">Selling price</label>
+                            <label class="form-label">Prodajna cena</label>
                             <div>
                                 <span class="text-primary fw-bold">@Model.SellingPriceString RSD</span>
                                 @if (Model.DiscountPercent > 0)
                                 {
-                                    <span class="text-warning ms-2">(@Model.DiscountPercent.ToString()% Discount)</span>
+                                    <span class="text-warning ms-2">(@Model.DiscountPercent.ToString()% popusta)</span>
                                 }
                             </div>
                         </div>
 
                         <div class="mb-3">
-                            <label asp-for="DiscountPercent" class="form-label">Discount</label>
+                            <label asp-for="DiscountPercent" class="form-label">Popust</label>
                             <div class="input-group">
                                 <input asp-for="DiscountPercent" type="number" min="0" max="100" step="0.01" class="form-control" />
                                 <span class="input-group-text">%</span>
@@ -56,18 +56,18 @@
                         </div>
 
                         <div class="mb-3">
-                            <label class="form-label">Image</label>
+                            <label class="form-label">Slika</label>
                             <input type="file" name="imageFile" id="imageFile" class="form-control" accept=".jpg,.jpeg,.png,.gif,.webp" />
                             @if (!string.IsNullOrEmpty(Model.ImageUrl))
                             {
-                                <img src="@Model.ImageUrl" class="img-thumbnail mt-2" style="max-height: 150px;" alt="Current image" />
+                                <img src="@Model.ImageUrl" class="img-thumbnail mt-2" style="max-height: 150px;" alt="Trenutna slika" />
                             }
                             <div class="form-text">JPG/PNG/GIF/WebP, max 15 MB.</div>
                             @if (ViewData.ModelState["imageFile"]?.Errors.Any() == true)
                             {
                                 <span class="text-danger">@ViewData.ModelState["imageFile"].Errors.First().ErrorMessage</span>
                             }
-                            <img id="imagePreview" class="img-thumbnail mt-2" style="max-height: 150px; display: none;" alt="Image preview" />
+                            <img id="imagePreview" class="img-thumbnail mt-2" style="max-height: 150px; display: none;" alt="Prikaz slike" />
                         </div>
 
                         <div class="mb-3 form-check">
@@ -77,9 +77,9 @@
 
                         <hr />
                         <div class="d-flex gap-2">
-                            <input type="submit" value="Save changes" class="btn btn-success" />
-                            <a asp-controller="AdminMenu" asp-action="DeleteComboMenu" asp-route-id="@Model.Id" class="btn btn-danger">Delete</a>
-                            <a asp-controller="AdminMenu" asp-action="Index" class="btn btn-outline-primary">Back</a>
+                            <input type="submit" value="Sačuvaj izmene" class="btn btn-success" />
+                            <a asp-controller="AdminMenu" asp-action="DeleteComboMenu" asp-route-id="@Model.Id" class="btn btn-danger">Obriši</a>
+                            <a asp-controller="AdminMenu" asp-action="Index" class="btn btn-outline-primary">Nazad</a>
                         </div>
                     </form>
                 </div>
@@ -88,7 +88,7 @@
             <!-- Current items -->
             <div class="card mb-3 px-0">
                 <div class="card-header d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0">Items in Combo</h5>
+                    <h5 class="mb-0">Stavke u combu</h5>
                     <span class="badge rounded-pill bg-primary">@Model.Items.Count</span>
                 </div>
                 <div class="card-body p-0">
@@ -107,7 +107,7 @@
                                             <input type="hidden" name="comboMenuId" value="@Model.Id" />
                                             <input type="hidden" name="comboMenuItemId" value="@item.Id" />
                                             <input type="number" name="amount" value="@item.Amount" min="1" class="form-control form-control-sm me-1" style="width: 80px;" />
-                                            <button type="submit" class="btn btn-outline-primary btn-sm">Update</button>
+                                            <button type="submit" class="btn btn-outline-primary btn-sm">Ažuriraj</button>
                                         </form>
                                         <a asp-controller="AdminMenu" asp-action="DeleteComboMenuItem" asp-route-comboMenuId="@Model.Id" asp-route-comboMenuItemId="@item.Id" class="btn btn-outline-danger btn-sm"><i class="bi bi-trash-fill"></i></a>
                                     </div>
@@ -117,7 +117,7 @@
                     }
                     else
                     {
-                        <div class="p-3 text-muted">No items added yet.</div>
+                        <div class="p-3 text-muted">Još nema dodatih stavki.</div>
                     }
                 </div>
             </div>
@@ -125,13 +125,13 @@
 
         <!-- Right column: food picker -->
         <div class="col">
-            <h5>Add Food Items</h5>
+            <h5>Dodaj jela</h5>
             <form method="get" asp-controller="AdminMenu" asp-action="EditComboMenu" class="mb-3">
                 <input type="hidden" name="id" value="@Model.Id" />
                 <div class="input-group">
-                    <input type="text" name="searchString" value="@currentFilter" class="form-control" placeholder="Search food by name..." />
+                    <input type="text" name="searchString" value="@currentFilter" class="form-control" placeholder="Pretraži jelo po imenu..." />
                     <select name="categoryId" class="form-select">
-                        <option value="">All categories</option>
+                        <option value="">Sve kategorije</option>
                         @foreach (var cat in categories)
                         {
                             @if (cat.Id == currentCategory)
@@ -144,10 +144,10 @@
                             }
                         }
                     </select>
-                    <button type="submit" class="btn btn-primary"><i class="bi bi-search"></i> Search</button>
+                    <button type="submit" class="btn btn-primary"><i class="bi bi-search"></i> Pretraži</button>
                     @if (!string.IsNullOrEmpty(currentFilter) || currentCategory > 0)
                     {
-                        <a asp-controller="AdminMenu" asp-action="EditComboMenu" asp-route-id="@Model.Id" class="btn btn-secondary">Clear</a>
+                        <a asp-controller="AdminMenu" asp-action="EditComboMenu" asp-route-id="@Model.Id" class="btn btn-secondary">Očisti</a>
                     }
                 </div>
             </form>
@@ -168,7 +168,7 @@
                                 <input type="hidden" name="comboMenuId" value="@Model.Id" />
                                 <input type="hidden" name="foodId" value="@food.Id" />
                                 <input type="number" name="amount" value="1" min="1" class="form-control form-control-sm me-1" style="width: 80px;" />
-                                <button type="submit" class="btn btn-outline-success btn-sm">Add</button>
+                                <button type="submit" class="btn btn-outline-success btn-sm">Dodaj</button>
                             </form>
                         </div>
                     </div>

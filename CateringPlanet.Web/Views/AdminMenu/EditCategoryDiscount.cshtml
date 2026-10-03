@@ -1,5 +1,5 @@
 ﻿@{
-    ViewData["Title"] = "Edit category discount";
+    ViewData["Title"] = "Izmena kategorije";
     Layout = "~/Views/Shared/_Layout.cshtml";
     var categories = ViewData["Categories"] as IEnumerable<FoodCategoryDto> ?? Enumerable.Empty<FoodCategoryDto>();
 }
@@ -8,12 +8,12 @@
     <div class="card mb-2 px-0">
         <div class="card-body py-4 px-md-5">
             <form asp-controller="AdminMenu" asp-action="EditCategoryDiscount" method="post">
-                <h4>Edit food category discount</h4>
+                <h4>Izmena kategorije</h4>
                 <hr />
 
                 <div class="mb-3">
-                    <label class="form-label">Food category</label>
-                    <select name="foodCategoryId" class="form-select">
+                    <label class="form-label">Kategorija jela</label>
+                    <select id="categorySelect" name="foodCategoryId" class="form-select">
                         @foreach (var cat in categories)
                         {
                             <option value="@cat.Id">@cat.Name</option>
@@ -22,16 +22,39 @@
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label">Discount percentage</label>
+                    <label for="categoryName" class="form-label">Naziv kategorije</label>
+                    <input id="categoryName" name="name" class="form-control" />
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Procenat popusta</label>
                     <div class="input-group" style="max-width: 40%;">
                         <input name="discountPercent" type="number" min="0" max="100" step="0.01" value="0" class="form-control" />
                         <span class="input-group-text">%</span>
                     </div>
                 </div>
 
-                <input type="submit" value="Save changes" class="btn btn-success" />
-                <a asp-controller="AdminMenu" asp-action="Index" class="btn btn-primary">Back</a>
+                <input type="submit" value="Sačuvaj izmene" class="btn btn-success" />
+                <a asp-controller="AdminMenu" asp-action="Index" class="btn btn-primary">Nazad</a>
             </form>
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <script>
+        (function () {
+            var select = document.getElementById('categorySelect');
+            var nameInput = document.getElementById('categoryName');
+            function fillName() {
+                if (select && nameInput) {
+                    nameInput.value = select.options[select.selectedIndex].text;
+                }
+            }
+            if (select) {
+                select.addEventListener('change', fillName);
+                fillName();
+            }
+        })();
+    </script>
+}

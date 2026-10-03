@@ -14,22 +14,22 @@
                 <h5>@Model.Name</h5>
                 <span class="text-muted pb-0">
                     @Model.UnitPrice.ToString("N2") RSD<br />
-                    @(Model.IsCombo ? "Combo paket" : "Food")
+                    @(Model.IsCombo ? "Combo paket" : "Jelo")
                 </span>
             </div>
 
             <div class="col text-center">
-                <h6>Quantity: @Model.Amount</h6>
+                <h6>Broj: @Model.Amount</h6>
                 <input type="number" name="amount" value="@Model.Amount" min="1" class="form-control w-50 mx-auto" />
             </div>
 
             <div class="col-auto text-center">
-                <h6>Price</h6>
+                <h6>Cena</h6>
                 <h5 class="text-secondary">@Model.LineTotalString RSD</h5>
             </div>
 
             <div class="col text-center">
-                <button type="submit" class="btn btn-success"><i class="bi bi-pencil-square"> Edit</i></button>
+                <button type="submit" class="btn btn-success"><i class="bi bi-pencil-square"> Izmeni</i></button>
                 <a asp-controller="Checkout" asp-action="RemoveCartItem" asp-route-itemId="@Model.ItemId" asp-route-isCombo="@Model.IsCombo" class="btn btn-danger" role="button"><i class="bi bi-trash-fill"></i></a>
             </div>
         </div>

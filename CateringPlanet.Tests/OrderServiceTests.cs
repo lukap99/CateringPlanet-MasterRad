@@ -170,6 +170,34 @@ public class OrderServiceTests
     }
 
     [Fact]
+    public async Task PlaceOrder_WithRequestedDatetime_StoresIt()
+    {
+        var fx = new Fixture();
+        var requested = new DateTime(2026, 12, 31, 18, 30, 0);
+        var cart = StandardCart();
+        cart.RequestedDatetime = requested;
+
+        await fx.Service.PlaceOrderAsync("userA", cart);
+        var order = Assert.Single(fx.Orders.Orders);
+
+        Assert.Equal(requested, order.RequestedDatetime);
+    }
+
+    [Fact]
+    public async Task PlaceOrder_NoRequestedDatetime_FallsBackToNow()
+    {
+        var fx = new Fixture();
+        var before = DateTime.Now;
+        var cart = StandardCart();
+
+        await fx.Service.PlaceOrderAsync("userA", cart);
+        var order = Assert.Single(fx.Orders.Orders);
+
+        Assert.NotNull(order.RequestedDatetime);
+        Assert.InRange(order.RequestedDatetime!.Value, before.AddSeconds(-5), DateTime.Now.AddSeconds(5));
+    }
+
+    [Fact]
     public async Task UpdateOrderStatus_Completed_MarksPaidAndRecordsDateCompleted()
     {
         var fx = new Fixture();

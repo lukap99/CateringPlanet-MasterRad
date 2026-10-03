@@ -2,7 +2,7 @@
 @inject Microsoft.Extensions.Configuration.IConfiguration Configuration
 @{
     var currentUser = await UserManager.GetUserAsync(User);
-    var userName = currentUser is null ? "Account" : $"{currentUser.FirstName} {currentUser.LastName}";
+    var userName = currentUser is null ? "Nalog" : $"{currentUser.FirstName} {currentUser.LastName}";
 }
 
 <!-- Admin -->
@@ -14,49 +14,49 @@
             Ketering Planet
         </a>
 
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Otvori navigaciju">
             <span class="navbar-toggler-icon"></span>
         </button>
 
         <div class="collapse navbar-collapse" id="navbarNavDropdown">
             <ul class="navbar-nav ms-auto fs-6 text-primary">
                 <li class="nav-item">
-                    <a class="nav-link" asp-controller="Home" asp-action="Index">Home</a>
+                    <a class="nav-link" asp-controller="Home" asp-action="Index">Početna</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" asp-controller="AdminMenu" asp-action="Index">
                         <i class="bi bi-card-list"></i>
-                        Edit menu
+                        Izmeni meni
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" asp-controller="AdminOrder" asp-action="Index">
                         <i class="bi bi-cash-stack"></i>
-                        Orders
+                        Porudžbine
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" asp-controller="AdminUser" asp-action="Users">
                         <i class="bi bi-file-person-fill"></i>
-                        Manage customers
+                        Upravljanje korisnicima
                     </a>
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <i class="bi bi-person-workspace"></i>
-                        Manage managers
+                        Upravljanje menadžerima
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                         <li>
                             <a class="dropdown-item" asp-controller="AdminUser" asp-action="Managers">
                                 <i class="bi bi-person-lines-fill"></i>
-                                View managers
+                                Pregled menadžera
                             </a>
                         </li>
                         <li>
                             <a class="dropdown-item" asp-controller="AdminUser" asp-action="CreateManager">
                                 <i class="bi bi-person-plus-fill"></i>
-                                Add new manager
+                                Dodaj novog menadžera
                             </a>
                         </li>
                     </ul>
@@ -73,8 +73,8 @@
                         @userName
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarUserDropdown">
-                        <li><a class="dropdown-item" asp-controller="Account" asp-action="AccountDetails">Account details</a></li>
-                        <li><a class="dropdown-item" asp-controller="Account" asp-action="Logout">Log out</a></li>
+                        <li><a class="dropdown-item" asp-controller="Account" asp-action="AccountDetails">Detalji naloga</a></li>
+                        <li><a class="dropdown-item" asp-controller="Account" asp-action="Logout">Odjava</a></li>
                     </ul>
                 </li>
             </ul>

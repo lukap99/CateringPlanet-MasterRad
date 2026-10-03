@@ -7,10 +7,10 @@
 
 @if (ViewBag.TotalPages > 1)
 {
-    <nav aria-label="Pagination">
+    <nav aria-label="Paginacija">
         <ul class="pagination justify-content-center">
             <li class="page-item @(ViewBag.CurrentPage == 1 ? "disabled" : "")">
-                <a class="page-link" href="@Url.Action(actionName, new { sortOrder, searchString, page = (int)ViewBag.CurrentPage - 1, id })">Previous</a>
+                <a class="page-link" href="@Url.Action(actionName, new { sortOrder, searchString, page = (int)ViewBag.CurrentPage - 1, id })">Prethodna</a>
             </li>
 
             @for (int p = 1; p <= (int)ViewBag.TotalPages; p++)
@@ -21,7 +21,7 @@
             }
 
             <li class="page-item @(ViewBag.CurrentPage == ViewBag.TotalPages ? "disabled" : "")">
-                <a class="page-link" href="@Url.Action(actionName, new { sortOrder, searchString, page = (int)ViewBag.CurrentPage + 1, id })">Next</a>
+                <a class="page-link" href="@Url.Action(actionName, new { sortOrder, searchString, page = (int)ViewBag.CurrentPage + 1, id })">Sledeća</a>
             </li>
         </ul>
     </nav>

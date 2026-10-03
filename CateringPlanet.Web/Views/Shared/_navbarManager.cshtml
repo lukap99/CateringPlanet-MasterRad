@@ -1,7 +1,7 @@
 ﻿@inject UserManager<ApplicationUser> UserManager
 @{
     var currentUser = await UserManager.GetUserAsync(User);
-    var userName = currentUser is null ? "Account" : $"{currentUser.FirstName} {currentUser.LastName}";
+    var userName = currentUser is null ? "Nalog" : $"{currentUser.FirstName} {currentUser.LastName}";
 }
 
 <!-- Manager -->
@@ -13,25 +13,25 @@
             Ketering Planet
         </a>
 
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Otvori navigaciju">
             <span class="navbar-toggler-icon"></span>
         </button>
 
         <div class="collapse navbar-collapse" id="navbarNavDropdown">
             <ul class="navbar-nav ms-auto fs-5 text-primary">
                 <li class="nav-item">
-                    <a class="nav-link" asp-controller="Home" asp-action="Index">Home</a>
+                    <a class="nav-link" asp-controller="Home" asp-action="Index">Početna</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" asp-controller="AdminMenu" asp-action="Index">
                         <i class="bi bi-card-list"></i>
-                        Edit menu
+                        Izmeni meni
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" asp-controller="AdminOrder" asp-action="Index">
                         <i class="bi bi-cash-stack"></i>
-                        Orders
+                        Porudžbine
                     </a>
                 </li>
                 <li class="nav-item dropdown">
@@ -40,8 +40,8 @@
                         @userName
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                        <li><a class="dropdown-item" asp-controller="Account" asp-action="AccountDetails">Account details</a></li>
-                        <li><a class="dropdown-item" asp-controller="Account" asp-action="Logout">Log out</a></li>
+                        <li><a class="dropdown-item" asp-controller="Account" asp-action="AccountDetails">Detalji naloga</a></li>
+                        <li><a class="dropdown-item" asp-controller="Account" asp-action="Logout">Odjava</a></li>
                     </ul>
                 </li>
             </ul>

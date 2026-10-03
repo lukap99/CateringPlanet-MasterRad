@@ -1,4 +1,5 @@
-﻿using System.Security.Claims;
+﻿using System.Globalization;
+using System.Security.Claims;
 using CateringPlanet.Application.DTOs;
 using CateringPlanet.Application.Abstractions;
 using Microsoft.AspNetCore.Authorization;
@@ -87,9 +88,31 @@ public class CheckoutController : Controller
     /// <summary>Captures delivery/payment/discount selections and shows the review screen.</summary>
     [HttpPost]
     [Authorize]
-    public async Task<IActionResult> CheckoutReview(int deliveryMethodId, int paymentMethodId, int orderDiscountId, string deliveryLocation)
+    public async Task<IActionResult> CheckoutReview(int deliveryMethodId, int paymentMethodId, int orderDiscountId, string deliveryLocation, string? requestedDatetime)
     {
         var cart = _cartService.GetCart();
+
+        // Parse the datetime-local value ("yyyy-MM-ddTHH:mm", optionally with seconds).
+        DateTime? parsedRequestedDatetime = null;
+        if (!string.IsNullOrEmpty(requestedDatetime))
+        {
+            if (!DateTime.TryParseExact(requestedDatetime,
+                    new[] { "yyyy-MM-ddTHH:mm", "yyyy-MM-ddTHH:mm:ss" },
+                    CultureInfo.InvariantCulture, DateTimeStyles.None, out var value))
+            {
+                TempData["ErrorMessage"] = "Unesite ispravno vreme isporuke.";
+                return RedirectToAction(nameof(Index));
+            }
+
+            parsedRequestedDatetime = value;
+        }
+
+        // Reject past values, allowing a 2-minute grace for clock skew.
+        if (parsedRequestedDatetime.HasValue && parsedRequestedDatetime.Value < DateTime.Now.AddMinutes(-2))
+        {
+            TempData["ErrorMessage"] = "Vreme isporuke ne može biti u prošlosti.";
+            return RedirectToAction(nameof(Index));
+        }
 
         var delivery = await _orderService.GetDeliveryMethodAsync(deliveryMethodId);
         var payment = await _orderService.GetPaymentMethodAsync(paymentMethodId);
@@ -105,6 +128,7 @@ public class CheckoutController : Controller
         }
         _cartService.SetOrderDiscount(discount);
         _cartService.SetContact(cart.ContactName ?? string.Empty, cart.ContactPhone ?? string.Empty, deliveryLocation ?? string.Empty);
+        _cartService.SetRequestedDatetime(parsedRequestedDatetime);
 
         return View(_cartService.GetCart());
     }
@@ -126,7 +150,7 @@ public class CheckoutController : Controller
             return RedirectToAction(nameof(Index));
         }
 
-        var orderId = await _orderService.PlaceOrderAsync(userId, cart);
+        var orderId = await _orderService.PlaceOrderAsync(userId, cart, cart.RequestedDatetime);
         _cartService.Clear();
 
         TempData["SuccessMessage"] = "Order has been placed.";

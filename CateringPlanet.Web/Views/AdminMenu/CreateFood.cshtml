@@ -1,6 +1,6 @@
-@model FoodDto
+﻿@model FoodDto
 @{
-    ViewData["Title"] = "Create food";
+    ViewData["Title"] = "Kreiraj jelo";
     Layout = "~/Views/Shared/_Layout.cshtml";
     var categories = ViewData["Categories"] as IEnumerable<FoodCategoryDto> ?? Enumerable.Empty<FoodCategoryDto>();
 }
@@ -9,7 +9,7 @@
     <div class="card mb-2 px-0">
         <div class="card-body py-4 px-md-5">
             <form asp-controller="AdminMenu" asp-action="CreateFood" method="post" enctype="multipart/form-data">
-                <h4>Create food</h4>
+                <h4>Kreiraj jelo</h4>
                 <hr />
 
                 <div class="mb-3">
@@ -19,7 +19,7 @@
                 </div>
 
                 <div class="mb-3">
-                    <label asp-for="FoodCategoryId" class="form-label">Food category</label>
+                    <label asp-for="FoodCategoryId" class="form-label">Kategorija jela</label>
                     <select asp-for="FoodCategoryId" class="form-select">
                         @foreach (var cat in categories)
                         {
@@ -39,7 +39,7 @@
                 </div>
 
                 <div class="mb-3">
-                    <label asp-for="Price" class="form-label">Base price</label>
+                    <label asp-for="Price" class="form-label">Osnovna cena</label>
                     <div class="input-group" style="max-width: 40%;">
                         <input asp-for="Price" type="number" min="1" step="0.01" class="form-control" />
                         <span class="input-group-text">RSD</span>
@@ -47,7 +47,7 @@
                 </div>
 
                 <div class="mb-3">
-                    <label asp-for="DiscountPercent" class="form-label">Discount</label>
+                    <label asp-for="DiscountPercent" class="form-label">Popust</label>
                     <div class="input-group" style="max-width: 40%;">
                         <input asp-for="DiscountPercent" type="number" min="0" max="100" step="0.01" class="form-control" />
                         <span class="input-group-text">%</span>
@@ -55,14 +55,14 @@
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label">Image</label>
+                    <label class="form-label">Slika</label>
                     <input type="file" name="imageFile" id="imageFile" class="form-control" accept=".jpg,.jpeg,.png,.gif,.webp" />
                     <div class="form-text">JPG/PNG/GIF/WebP, max 15 MB.</div>
                     @if (ViewData.ModelState["imageFile"]?.Errors.Any() == true)
                     {
                         <span class="text-danger">@ViewData.ModelState["imageFile"].Errors.First().ErrorMessage</span>
                     }
-                    <img id="imagePreview" class="img-thumbnail mt-2" style="max-height: 200px; display: none;" alt="Image preview" />
+                    <img id="imagePreview" class="img-thumbnail mt-2" style="max-height: 200px; display: none;" alt="Prikaz slike" />
                 </div>
 
                 <div class="mb-3 form-check">
@@ -70,8 +70,8 @@
                     <label asp-for="IsVisible" class="form-check-label"></label>
                 </div>
 
-                <input type="submit" value="Create" class="btn btn-success" />
-                <a asp-controller="AdminMenu" asp-action="Index" class="btn btn-primary">Back</a>
+                <input type="submit" value="Kreiraj" class="btn btn-success" />
+                <a asp-controller="AdminMenu" asp-action="Index" class="btn btn-primary">Nazad</a>
             </form>
         </div>
     </div>

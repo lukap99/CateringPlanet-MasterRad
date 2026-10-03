@@ -1,6 +1,6 @@
 ﻿@model FoodCategoryDto
 @{
-    ViewData["Title"] = "Create category";
+    ViewData["Title"] = "Kreiraj kategoriju";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -8,26 +8,26 @@
     <div class="card mb-2 px-0">
         <div class="card-body py-4 px-md-5">
             <form asp-controller="AdminMenu" asp-action="CreateCategory" method="post">
-                <h4>Create new food category</h4>
+                <h4>Kreiraj novu kategoriju jela</h4>
                 <hr />
 
                 <div class="mb-3">
                     <label asp-for="Name" class="form-label"></label>
-                    <input asp-for="Name" class="form-control" placeholder="e.g. Soups, Desserts" />
+                    <input asp-for="Name" class="form-control" placeholder="npr. Supe, Dezerti" />
                     <span asp-validation-for="Name" class="text-danger"></span>
                 </div>
 
                 <div class="mb-3">
-                    <label asp-for="DiscountPercent" class="form-label">Discount percentage</label>
+                    <label asp-for="DiscountPercent" class="form-label">Procenat popusta</label>
                     <div class="input-group" style="max-width: 40%;">
                         <input asp-for="DiscountPercent" type="number" min="0" max="100" step="0.01" class="form-control" />
                         <span class="input-group-text">%</span>
                     </div>
-                    <small class="form-text text-muted">Leave 0 if no discount applies to the whole category.</small>
+                    <small class="form-text text-muted">Ostavite 0 ako se popust ne primenjuje na celu kategoriju.</small>
                 </div>
 
-                <input type="submit" value="Create Category" class="btn btn-success" />
-                <a asp-controller="AdminMenu" asp-action="Index" class="btn btn-primary">Back</a>
+                <input type="submit" value="Kreiraj kategoriju" class="btn btn-success" />
+                <a asp-controller="AdminMenu" asp-action="Index" class="btn btn-primary">Nazad</a>
             </form>
         </div>
     </div>

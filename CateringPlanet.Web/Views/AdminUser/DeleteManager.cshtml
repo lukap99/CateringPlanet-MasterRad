@@ -1,24 +1,24 @@
 ﻿@model UserDto
 @{
-    ViewData["Title"] = "Delete manager";
+    ViewData["Title"] = "Brisanje menadžera";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <div class="container col-xxl-4 px-4 py-3">
     <div class="card mb-2 px-0 py-0">
         <div class="card-body py-4 px-md-5">
-            <h4>Are you sure you want to delete manager?</h4>
+            <h4>Da li ste sigurni da želite da obrišete menadžera?</h4>
             <hr />
-            <h5>Name: <span class="text-muted">@Model.FullName</span></h5>
+            <h5>Ime: <span class="text-muted">@Model.FullName</span></h5>
             <h5>E-mail: <span class="text-muted">@Model.Email</span></h5>
             <hr />
 
             <div class="text-center">
                 <form asp-controller="AdminUser" asp-action="DeleteManager" method="post" class="d-inline">
                     <input type="hidden" name="id" value="@Model.Id" />
-                    <button type="submit" class="btn btn-danger">Delete</button>
+                    <button type="submit" class="btn btn-danger">Obriši</button>
                 </form>
-                <a asp-controller="AdminUser" asp-action="Managers" class="btn btn-primary">Back</a>
+                <a asp-controller="AdminUser" asp-action="Managers" class="btn btn-primary">Nazad</a>
             </div>
         </div>
     </div>

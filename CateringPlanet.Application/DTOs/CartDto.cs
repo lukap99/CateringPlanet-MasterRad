@@ -25,6 +25,9 @@ public class CartDto
 
     public string? DeliveryLocation { get; set; }
 
+    /// <summary>Requested delivery date and time chosen at checkout, if any (null = as soon as possible).</summary>
+    public DateTime? RequestedDatetime { get; set; }
+
     public DeliveryMethodDto? DeliveryMethod { get; set; }
 
     public PaymentMethodDto? PaymentMethod { get; set; }

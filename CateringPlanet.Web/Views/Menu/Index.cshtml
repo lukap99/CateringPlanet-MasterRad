@@ -2,7 +2,7 @@
 
 @{
     Layout = "~/Views/Shared/_MenuLayout.cshtml";
-    ViewData["Title"] = "Menu";
+    ViewData["Title"] = "Meni";
 
     // selectedCategoryId values:
     //   0  = Show all food items + combo menus
@@ -27,33 +27,33 @@
         <!-- Main items column -->
         <div class="col py-3">
 
-            <!-- Search form (informational; search filtering is wired in a later phase) -->
+            <!-- Search form -->
             <form method="get" asp-controller="Menu" asp-action="Index" class="form-inline mb-3">
                 <div class="input-group">
-                    <input type="text" name="searchString" class="form-control" placeholder="Search food by name..." />
-                    <button type="submit" class="btn btn-primary">Search</button>
+                    <input type="text" name="searchString" value="@ViewData["CurrentFilter"]" class="form-control" placeholder="Pretraži jelo po imenu..." />
+                    <button type="submit" class="btn btn-primary">Pretraži</button>
                 </div>
             </form>
 
             @if (ViewData["AddMessage"] != null)
             {
                 <div class="alert alert-success alert-dismissible show fade" role="alert">
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    <strong>Info:</strong> @ViewData["AddMessage"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Zatvori"></button>
+                    <strong>Informacija:</strong> @ViewData["AddMessage"]
                 </div>
             }
             @if (ViewData["ErrorMessage"] != null)
             {
                 <div class="alert alert-warning alert-dismissible show fade" role="alert">
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    <strong>Info:</strong> @ViewData["ErrorMessage"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Zatvori"></button>
+                    <strong>Informacija:</strong> @ViewData["ErrorMessage"]
                 </div>
             }
 
             @if (comboItems.Any())
             {
                 <div class="card mb-2 p-3 bg-primary text-white" style="font-family:'Segoe UI Black';">
-                    <h3 class="my-0">Combo items</h3>
+                    <h3 class="my-0">Combo meniji</h3>
                 </div>
 
                 @foreach (var comboItem in comboItems)

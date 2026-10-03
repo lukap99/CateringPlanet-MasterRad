@@ -27,11 +27,17 @@ public class MenuService : IMenuService
         => (await _categoryRepository.GetAllAsync()).Select(MapCategory).ToList();
 
     /// <inheritdoc />
-    public async Task<IEnumerable<FoodDto>> GetVisibleFoodsAsync(int? categoryId)
+    public async Task<IEnumerable<FoodDto>> GetVisibleFoodsAsync(int? categoryId, string? searchString = null)
     {
         IEnumerable<Food> foods = categoryId is > 0
             ? await _foodRepository.GetVisibleByCategoryAsync(categoryId.Value)
             : await _foodRepository.GetVisibleAsync();
+
+        if (!string.IsNullOrEmpty(searchString))
+        {
+            foods = foods.Where(f => f.Name.Contains(searchString, StringComparison.OrdinalIgnoreCase));
+        }
+
         return foods.Select(MapFood).ToList();
     }
 
@@ -136,6 +142,21 @@ public class MenuService : IMenuService
         }
 
         entity.DiscountPercent = discountPercent;
+        entity.ModifiedAt = DateTime.Now;
+        await _categoryRepository.UpdateAsync(entity);
+    }
+
+    /// <inheritdoc />
+    public async Task UpdateCategoryAsync(int categoryId, string name)
+    {
+        var entity = await _categoryRepository.GetByIdAsync(categoryId);
+        if (entity is null)
+        {
+            return;
+        }
+
+        // The slug stays unchanged: food image folders/URLs are derived from it.
+        entity.Name = name;
         entity.ModifiedAt = DateTime.Now;
         await _categoryRepository.UpdateAsync(entity);
     }
